@@ -7,15 +7,17 @@ class InsertionSort : public Algorithm
 {
     Q_OBJECT
 public:
-    InsertionSort();
+    InsertionSort(int innerCounter = 1, int outterCounter = 1);
     ~InsertionSort();
 
 private slots:
-    void advance();   // pure virtual; set dataset to the state after next step
+    void advanceAlg();   // pure virtual; set dataset to the state after next step
     void back();
-
+signals:
+    void updateGraphics();
 private:
-
+    int innerCounter;
+    int outterCounter;
 };
 
 #endif // INSERTIONSORT_H

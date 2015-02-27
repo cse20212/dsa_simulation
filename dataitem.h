@@ -7,19 +7,33 @@
 class DataItem : public QGraphicsItem
 {
 public:
-    DataItem(double size = 1);
+    DataItem(double size = 1, double width = 10, double sceneOffset = 10,
+    double scenePosY = 0, int index = 0 );
     ~DataItem();
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     QPainterPath shape() const Q_DECL_OVERRIDE;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget) Q_DECL_OVERRIDE;
     void setShapeChoice(qint8 choice);
+    double getScenePosX();
+    double getScenePosY();
+    double getSize();
+    int getIndex();
+    void setScenePosX(double x);
+    void setScenePosY(double y);
+    void setIndex(int in);
+
 
 protected:
     void advance(int step) Q_DECL_OVERRIDE;
 
 private:
     double size; //size of the current data
+    double width;
+    double sceneOffset; //margin between graphics window and first data item
+    double scenePosX;
+    double scenePosY;
+    int index;   //index of item in dataset
     qreal angle;
     qreal speed;
     qreal mouseEyeDirection;

@@ -24,6 +24,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    QGroupBox *createAlgorithmGroup();
+    QGroupBox *createDataGroup();
+    QGraphicsView *createGraphicsWindow();
+    void initGraphicsItem();    // add items in currentDataSet to scene
+    void createActions();
+    void createToolBars();
+    void updateDataGraphics();
+
 private slots:
     void on_data_radio_checked();
 
@@ -39,14 +47,12 @@ private:
     DataSet *currentDataSet;
     Algorithm *currentAlgorithm;
 
-    QGroupBox *createAlgorithmGroup();
-    QGroupBox *createDataGroup();
-    QGraphicsView *createGraphicsWindow();
-
     QGraphicsView *graphicsView;
     QGraphicsScene *graphicsScene;
 
-    void initGraphicsItem();    // add items in currentDataSet to scene
+    // toolbars and menus
+    QToolBar *animationToolBar;
+    QAction *nextFrame;
 
 };
 
