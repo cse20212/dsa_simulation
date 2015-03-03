@@ -27,6 +27,7 @@ void GeneAlgorithm::setAlgList(){
         // initialize soring algorithm classes
            InsertionSort *insertionSort = new InsertionSort();
            algList.append(insertionSort);
+
     }
 }
 
