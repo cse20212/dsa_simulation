@@ -19,11 +19,14 @@ MainWindow::MainWindow(QWidget *parent) :
         currentDataSet = currentDataList[0];
     if (currentAlgList.size() >= 1)
         currentAlgorithm = currentAlgList[0];
-    currentAlgorithm->setDataSet(*currentDataSet);
+    currentAlgorithm->setDataSet(currentDataSet);
 
     grid->addWidget(createAlgorithmGroup(), 0, 0);
     grid->addWidget(createDataGroup(), 1, 0);
     grid->addWidget(createGraphicsWindow(), 0, 1);
+
+    createActions();
+    createToolBars();
 
     setWindowTitle(tr("Algorithm Animation"));
     resize(480, 320);
@@ -32,6 +35,26 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::createActions() {
+    nextFrame = new QAction(tr("Next"),this);
+    nextFrame->setStatusTip(tr("Next Step"));
+    connect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
+    connect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+    //updateDataGraphics();
+}
+
+void MainWindow::createToolBars() {
+    animationToolBar = addToolBar(tr("Next"));
+    animationToolBar->addAction(nextFrame);
+}
+
+void MainWindow::updateDataGraphics() {
+    foreach (DataItem* item, *(currentAlgorithm->getDataSet())->getItems()){
+        item->setPos(item->getScenePosX(), item->getScenePosY());
+    }
+
 }
 
 QGroupBox *MainWindow::createAlgorithmGroup() {
@@ -49,7 +72,6 @@ QGroupBox *MainWindow::createAlgorithmGroup() {
 
     vbox->addStretch(1);
     groupBox->setLayout(vbox);
-    return groupBox;
     return groupBox;
 }
 
@@ -95,13 +117,15 @@ void MainWindow::initGraphicsItem() {
             graphicsScene->removeItem(item);
     }
     //qDeleteAll(topLevels);
+    // update viewport
+    (graphicsView->viewport())->update();
 
-    graphicsScene->setSceneRect(-300, -300, 600, 600);
+    graphicsScene->setSceneRect(QRect(QPoint(0,0), QPoint(graphicsView->width(), graphicsView->height())));
     graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    QList<DataItem *> dataItems = currentDataSet->getItems();
-    for (int i = 0; i < dataItems.size(); ++i) {
-           DataItem *dataItem = dataItems[i];
-           dataItem->setPos(50 + 10*i, 50);
+    QList<DataItem *>* dataItems = (currentAlgorithm->getDataSet())->getItems();
+    for (int i = 0; i < dataItems->size(); ++i) {
+           DataItem *dataItem = (*dataItems)[i];
+           dataItem->setPos(dataItem->getScenePosX(), dataItem->getScenePosY());
            graphicsScene->addItem(dataItem);
        }
 
@@ -117,7 +141,7 @@ void MainWindow::initGraphicsItem() {
         if (i != currentDataMap.end() && i.key() == button) {
             DataSet* set = currentDataMap[button];
             currentDataSet = set;
-            currentAlgorithm->setDataSet(*currentDataSet);
+            currentAlgorithm->setDataSet(currentDataSet);
             initGraphicsItem();
         } else {
             qDebug() << "Error in on_data_radio_checked";

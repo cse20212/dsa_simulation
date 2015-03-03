@@ -6,10 +6,11 @@
 #include <QString>
 #include <QDir>
 
-Algorithm::Algorithm(QString name, QString genAlgName): mySet(name, genAlgName)
+Algorithm::Algorithm(QString name, QString genAlgName)
 {
     this->name = name;
     this->genAlgName = genAlgName;
+
     setCodeFilePath();
 }
 
@@ -18,11 +19,11 @@ Algorithm::~Algorithm()
 
 }
 
-DataSet Algorithm::getDataSet() {
+DataSet* Algorithm::getDataSet() {
     return mySet;
 }
 
-void Algorithm::setDataSet(const DataSet &set){
+void Algorithm::setDataSet(DataSet *set){
     mySet = set;
 }
 

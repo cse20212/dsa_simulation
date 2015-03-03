@@ -7,6 +7,7 @@
 
 DataSet::DataSet(QString genAlgName, QString name)
 {
+    items = new QList<DataItem*>();
     this->name = name;
     this->genAlgName = genAlgName;
     setDataPath();
@@ -16,9 +17,10 @@ DataSet::DataSet(QString genAlgName, QString name)
 DataSet::~DataSet()
 {
     // not sure how to delete every item
-    for (qint8 i = 0; i < items.size(); i++) {
-        delete items.at(i);
+    for (qint8 i = 0; i < items->size(); i++) {
+        delete items->at(i);
     }
+    delete items;
 }
 
 void DataSet::setDataPath(){
@@ -38,7 +40,7 @@ QString DataSet::getGenAlgName(){
     return genAlgName;
 }
 
-QList<DataItem *> DataSet::getItems(){
+QList<DataItem *>* DataSet::getItems(){
     return items;
 }
 // read file and set items
@@ -55,8 +57,11 @@ void DataSet::setItems(){
     // initialize DataItems based on the list of string numbers
     qDebug() << dataList.size();
     for (int i = 0; i < dataList.size(); i++) {
-        DataItem* item = new DataItem(dataList.at(i).toDouble());
-        items << item;
+        DataItem* item = new DataItem(dataList.at(i).toDouble(), 20, 20, 50, i);
+        (*items) << item;
     }
 }
 
+double DataSet::getSize(){
+    return items->size();
+}
