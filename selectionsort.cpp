@@ -1,6 +1,6 @@
 #include "selectionsort.h"
 
-SelectionSort::SelectionSort():Algorithm("SelectionSort", "Sorting")
+SelectionSort::SelectionSort(int innerCounter, int outterCounter):Algorithm("SelectionSort", "Sorting")
 {
 
 }
@@ -10,7 +10,7 @@ SelectionSort::~SelectionSort()
 
 }
 
-void SelectionSort::advance(){
+void SelectionSort::advanceAlg(){
     //pure virtual; set dataset to the state after next state
     QString name = "Algorithm::name";
 

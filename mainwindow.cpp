@@ -85,13 +85,16 @@ QGroupBox *MainWindow::createDataGroup() {
         vbox->addWidget(radioData);
 
     }
-    QList<QRadioButton *> buttons = currentDataMap.keys();
-    // check the first button
-    buttons[0]->setChecked(true);
-    for (int i = 0; i < buttons.size(); ++i) {
-     // set signal to init dataset graphics scene
-        connect(buttons[i], SIGNAL(clicked()), this, SLOT(on_data_radio_checked()));
+
+    QMap<QRadioButton*, DataSet*>::const_iterator kvp = currentDataMap.constBegin();
+    while (kvp != currentDataMap.constEnd()) {
+        if (kvp.value() == currentDataSet) {
+            (kvp.key())->setChecked(true);
+        }
+        connect(kvp.key(), SIGNAL(clicked()), this, SLOT(on_data_radio_checked()));
+        ++kvp;
     }
+
     vbox->addStretch(1);
     groupBox->setLayout(vbox);
     return groupBox;
@@ -125,7 +128,9 @@ void MainWindow::initGraphicsItem() {
     QList<DataItem *>* dataItems = (currentAlgorithm->getDataSet())->getItems();
     for (int i = 0; i < dataItems->size(); ++i) {
            DataItem *dataItem = (*dataItems)[i];
-           dataItem->setPos(dataItem->getScenePosX(), dataItem->getScenePosY());
+           double scenePosX = dataItem->getScenePosX();
+           double scenePosY = dataItem->getScenePosY();
+           dataItem->setPos( scenePosX, scenePosY);
            graphicsScene->addItem(dataItem);
        }
 
@@ -140,6 +145,7 @@ void MainWindow::initGraphicsItem() {
         // just get the first match, as there can only be one
         if (i != currentDataMap.end() && i.key() == button) {
             DataSet* set = currentDataMap[button];
+            set->resetIndex();
             currentDataSet = set;
             currentAlgorithm->setDataSet(currentDataSet);
             initGraphicsItem();
@@ -147,12 +153,6 @@ void MainWindow::initGraphicsItem() {
             qDebug() << "Error in on_data_radio_checked";
             return;
         }
-     /*
-        // e.g. casting to the class you know its connected with
-        QPushButton* button = dynamic_cast<QPushButton*>(sender());
-        if( button != NULL )
-        {
-           ...
-        }*? */
+
 
  }
