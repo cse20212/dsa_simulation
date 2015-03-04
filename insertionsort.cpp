@@ -14,7 +14,6 @@ InsertionSort::~InsertionSort()
 
 void InsertionSort::advanceAlg(){
     // pure virtual; set dataset to the state after next step
-    QString name = "Algorithm::name";
 
     DataSet* set = getDataSet();
     QList<DataItem*>* items = set->getItems();
@@ -24,17 +23,10 @@ void InsertionSort::advanceAlg(){
     // manipulate dataitems
     if ((*items)[innerCounter]->getSize() < (*items)[innerCounter-1]->getSize()){
         // swap
-        /*
-        int temp = items[innerCounter]->getIndex();
-        items[innerCounter]->setIndex(items[innerCounter-1]->getIndex());
-        items[innerCounter-1]->setIndex(temp); */
-
         items->swap(innerCounter, innerCounter-1);
         (*items)[innerCounter]->setIndex(innerCounter);
         (*items)[innerCounter - 1]->setIndex(innerCounter - 1);
         // advance two items
-        //items[innerCounter]->advance(1);
-        //items[innerCounter-1]->advance(1);
         emit updateGraphics();
     }
     // advance the counter

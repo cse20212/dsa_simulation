@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     dataset.cpp \
     dataitem.cpp \
     genealgorithm.cpp \
-    insertionsort.cpp
+    insertionsort.cpp \
+    selectionsort.cpp
 
 HEADERS  += mainwindow.h \
     algorithm.h \
     dataset.h \
     dataitem.h \
     genealgorithm.h \
-    insertionsort.h
+    insertionsort.h \
+    selectionsort.h
 
 FORMS    += mainwindow.ui
 

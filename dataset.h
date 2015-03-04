@@ -19,6 +19,8 @@ public:
     QString geName();
     QString getGenAlgName();
     QList<DataItem *> *getItems();
+    QMap<DataItem*, int> getOrigIndex();
+    void resetIndex();  // set index to original index
     void setItems();
     double getSize();
 
@@ -27,6 +29,7 @@ private:
     QString genAlgName;
     QString dataPath;   // path to resources
     QList<DataItem*>* items;
+    QMap<DataItem*, int> origIndex;
 };
 
 #endif // DATASET_H
