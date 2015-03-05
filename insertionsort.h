@@ -9,6 +9,7 @@ class InsertionSort : public Algorithm
 public:
     InsertionSort(int innerCounter = 1, int outterCounter = 1);
     ~InsertionSort();
+    bool inOrder(); // returns true if data is sorted in ascending order
 
 private slots:
     void advanceAlg();   // pure virtual; set dataset to the state after next step
