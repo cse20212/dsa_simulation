@@ -23,6 +23,7 @@ public:
     void resetIndex();  // set index to original index
     void setItems();
     double getSize();
+    void removeAllPointed();    // remove all pointed flag of the data items
 
 private:
     QString name;

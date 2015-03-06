@@ -22,7 +22,7 @@ public:
     void setScenePosX(double x);
     void setScenePosY(double y);
     void setIndex(int in);
-
+    void setpointed(int p);
 
 protected:
     void advance(int step) Q_DECL_OVERRIDE;
@@ -34,6 +34,7 @@ private:
     double scenePosX;
     double scenePosY;
     int index;   //index of item in dataset
+    int isPointed;  // indicate if this data item is currently being processed. 1 for yes
     qreal angle;
     qreal speed;
     qreal mouseEyeDirection;

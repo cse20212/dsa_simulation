@@ -9,6 +9,7 @@ DataItem::DataItem(double size, double width , double sceneOffset ,
     sceneOffset(sceneOffset), scenePosY(scenePosY), index(index), angle(0), speed(0), mouseEyeDirection(0),
     color(100, 125, 255), shapeChoice(1)
 {
+    isPointed = 0;  // initially the data is not pointed
     scenePosX = sceneOffset + index * width;
 }
 
@@ -37,7 +38,16 @@ void DataItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
     // Body
     painter->setBrush(color);
     painter->drawRect(-width/2, 0 , width , -size);
+    if (isPointed) {
+        QColor c(255, 0, 0);
+        painter->setBrush(c);
+        painter->drawRect(-width/2, 0 , width , -size);
+    }
 
+}
+// p is 1 indicates data is currently being processed, 0 otherwise
+void DataItem::setpointed(int p) {
+    isPointed  = p;
 }
 
 // used for collision detection...

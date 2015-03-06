@@ -23,6 +23,13 @@ DataSet::~DataSet()
     delete items;
 }
 
+void DataSet::removeAllPointed(){
+    foreach (DataItem* item, *items) {
+        item->setpointed(0);
+        item->update();
+    }
+}
+
 void DataSet::setDataPath(){
     //QString dir = "/Users/cindywang/simulator";
     dataPath = (QString)":/data/" + genAlgName + "/" + name + ".txt";

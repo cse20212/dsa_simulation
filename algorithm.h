@@ -23,6 +23,7 @@ public:
     void setCodeFilePath();    // set code file according to general algorithm name and its specific name
     QString getName();
     QString getGenAlgName();
+    virtual void resetCounter()=0;  // reset the algorithm counter
 private slots:
     virtual void advanceAlg()=0;   // pure virtual; set dataset to the state after next step
     virtual void back()=0;

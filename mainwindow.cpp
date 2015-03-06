@@ -148,6 +148,7 @@ void MainWindow::initGraphicsItem() {
             set->resetIndex();
             currentDataSet = set;
             currentAlgorithm->setDataSet(currentDataSet);
+            currentAlgorithm->resetCounter();
             initGraphicsItem();
         } else {
             qDebug() << "Error in on_data_radio_checked";

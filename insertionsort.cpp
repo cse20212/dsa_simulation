@@ -25,27 +25,41 @@ bool InsertionSort::inOrder() {
     return true;
 }
 
+void InsertionSort::resetCounter() {
+    innerCounter = 1;
+    outterCounter = 1;
+}
+
 void InsertionSort::advanceAlg(){
+    DataSet* set = getDataSet();
     // pure virtual; set dataset to the state after next step
-    if (!inOrder()) {
-        DataSet* set = getDataSet();
+    if (!inOrder()) {      
+        set->removeAllPointed();    // clean up and make all data items not pointed at
         QList<DataItem*>* items = set->getItems();
         // algorithm finished
          if (outterCounter > set->getSize() - 1) {
             //reset counters
-            innerCounter = 1;
-            outterCounter = 1;
+            resetCounter();
+            set->removeAllPointed();
+            emit updateGraphics();
             return;
         }
+         DataItem* itemOne = (*items).at(innerCounter);
+         DataItem* itemTwo = (*items).at(innerCounter-1);
+
         // manipulate dataitems
-        if ((*items)[innerCounter]->getSize() < (*items)[innerCounter-1]->getSize()){
+        if (itemOne->getSize() < itemTwo->getSize()){
             // swap
             items->swap(innerCounter, innerCounter-1);
-            (*items)[innerCounter]->setIndex(innerCounter);
-            (*items)[innerCounter - 1]->setIndex(innerCounter - 1);
+            itemTwo->setIndex(innerCounter);    // index has already swaped
+            itemOne ->setIndex(innerCounter - 1);
+            //set dataitems that are being processed
+            (*items).at(innerCounter-1) ->setpointed(1);
+            (*items).at(outterCounter) ->setpointed(1);
             // advance two items
             emit updateGraphics();
         }
+
         // advance the counter
         if (innerCounter == 1) {
             outterCounter++;
@@ -53,6 +67,15 @@ void InsertionSort::advanceAlg(){
         } else {
             innerCounter--;
         }
+    } else {
+        // already in order
+        if (outterCounter > set->getSize() - 1) {
+           //reset counters
+           resetCounter();
+           set->removeAllPointed();
+           emit updateGraphics();
+           return;
+       }
     }
 }
 void InsertionSort::back(){

@@ -10,6 +10,7 @@ public:
     InsertionSort(int innerCounter = 1, int outterCounter = 1);
     ~InsertionSort();
     bool inOrder(); // returns true if data is sorted in ascending order
+    void resetCounter();    // reset the algorithm counter
 
 private slots:
     void advanceAlg();   // pure virtual; set dataset to the state after next step
