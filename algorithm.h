@@ -26,7 +26,7 @@ public:
     virtual void resetCounter()=0;  // reset the algorithm counter
 private slots:
     virtual void advanceAlg()=0;   // pure virtual; set dataset to the state after next step
-    virtual void back()=0;
+    virtual void backAlg()=0;
 signals:
     virtual void updateGraphics()=0;
 private:

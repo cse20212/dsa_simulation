@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     dataitem.cpp \
     genealgorithm.cpp \
     insertionsort.cpp \
-    selectionsort.cpp
+    selectionsort.cpp \
+    mergesort.cpp
 
 HEADERS  += mainwindow.h \
     algorithm.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     dataitem.h \
     genealgorithm.h \
     insertionsort.h \
-    selectionsort.h
+    selectionsort.h \
+    mergesort.h
 
 FORMS    += mainwindow.ui
 

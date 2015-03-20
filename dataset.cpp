@@ -23,6 +23,13 @@ DataSet::~DataSet()
     delete items;
 }
 
+void DataSet::addItems(QList<DataItem*>* list){
+
+    foreach (DataItem* item, *list) {
+        items->append(item);
+    }
+}
+
 void DataSet::removeAllPointed(){
     foreach (DataItem* item, *items) {
         item->setpointed(0);

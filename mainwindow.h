@@ -34,6 +34,7 @@ public:
 
 private slots:
     void on_data_radio_checked();
+    void on_alg_radio_checked();
 
 private:
     Ui::MainWindow *ui;
@@ -53,6 +54,7 @@ private:
     // toolbars and menus
     QToolBar *animationToolBar;
     QAction *nextFrame;
+    QAction *previousFrame;
 
 };
 

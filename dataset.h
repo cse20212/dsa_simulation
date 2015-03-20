@@ -25,6 +25,8 @@ public:
     double getSize();
     void removeAllPointed();    // remove all pointed flag of the data items
 
+    void addItems(QList<DataItem*>* list);  // add dataitem to items
+
 private:
     QString name;
     QString genAlgName;

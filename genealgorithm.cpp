@@ -3,6 +3,7 @@
 #include <QDir>
 #include "algorithm.h"
 #include "insertionsort.h"
+#include "mergesort.h"
 #include "dataset.h"
 
 GeneAlgorithm::GeneAlgorithm(QString name):name(name)
@@ -27,6 +28,8 @@ void GeneAlgorithm::setAlgList(){
         // initialize soring algorithm classes
            InsertionSort *insertionSort = new InsertionSort();
            algList.append(insertionSort);
+           MergeSort *mergeSort = new MergeSort();
+           algList.append(mergeSort);
 
     }
 }

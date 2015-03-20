@@ -14,7 +14,7 @@ public:
 
 private slots:
     void advanceAlg();   // pure virtual; set dataset to the state after next step
-    void back();
+    void backAlg();
 signals:
     void updateGraphics();
 private:

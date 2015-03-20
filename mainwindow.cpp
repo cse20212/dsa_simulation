@@ -42,12 +42,18 @@ void MainWindow::createActions() {
     nextFrame->setStatusTip(tr("Next Step"));
     connect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
     connect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+
+    previousFrame = new QAction(tr("Back"),this);
+    previousFrame->setStatusTip(tr("Previous Step"));
+    connect(previousFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(backAlg()) );
     //updateDataGraphics();
 }
 
 void MainWindow::createToolBars() {
     animationToolBar = addToolBar(tr("Next"));
     animationToolBar->addAction(nextFrame);
+    animationToolBar = addToolBar(tr("Back"));
+    animationToolBar->addAction(previousFrame);
 }
 
 void MainWindow::updateDataGraphics() {
@@ -64,11 +70,18 @@ QGroupBox *MainWindow::createAlgorithmGroup() {
         QRadioButton *radioData = new QRadioButton(alg->getName());
         currentAlgMap[radioData] = alg;
         vbox->addWidget(radioData);
+
+
     }
     QList<QRadioButton *> buttons = currentAlgMap.keys();
-    // check the first button
-    buttons[0]->setChecked(true);
-    //set signal slots
+    QMap<QRadioButton*, Algorithm*>::const_iterator kvp = currentAlgMap.constBegin();
+    while (kvp != currentAlgMap.constEnd()) {
+        if (kvp.value() == currentAlgorithm) {
+            (kvp.key())->setChecked(true);
+        }
+        connect(kvp.key(), SIGNAL(clicked()), this, SLOT(on_alg_radio_checked()));
+        ++kvp;
+    }
 
     vbox->addStretch(1);
     groupBox->setLayout(vbox);
@@ -157,3 +170,32 @@ void MainWindow::initGraphicsItem() {
 
 
  }
+
+ // slots to connect with data selection, set/update current data
+  void MainWindow::on_alg_radio_checked(){
+      // e.g. check with member variable _foobarButton
+
+         QRadioButton* button = dynamic_cast<QRadioButton*>(sender());
+         QMap<QRadioButton*, Algorithm*>::const_iterator i = currentAlgMap.find(button);
+         // just get the first match, as there can only be one
+         if (i != currentAlgMap.end() && i.key() == button) {
+             Algorithm* alg = currentAlgMap[button];
+             currentAlgorithm = alg;
+
+             currentDataSet->resetIndex();
+             currentDataSet->removeAllPointed();
+             currentAlgorithm->setDataSet(currentDataSet);
+             currentAlgorithm->resetCounter();
+
+             // connect current algrithm with buttons
+             connect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
+             connect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+
+             initGraphicsItem();
+         } else {
+             qDebug() << "Error in on_alg_raio_checked";
+             return;
+         }
+
+
+  }
