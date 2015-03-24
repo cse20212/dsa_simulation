@@ -198,10 +198,6 @@ void MainWindow::initGraphicsItem() {
              currentAlgorithm->setDataSet(currentDataSet);
              currentAlgorithm->resetCounter();
 
-             // connect current algrithm with buttons
-             connect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
-             connect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
-
              initGraphicsItem();
          } else {
              qDebug() << "Error in on_alg_raio_checked";
