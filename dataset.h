@@ -20,12 +20,15 @@ public:
     QString getGenAlgName();
     QList<DataItem *> *getItems();
     QMap<DataItem*, int> getOrigIndex();
-    void resetIndex();  // set index to original index
+
     void setItems();
     double getSize();
-    void removeAllPointed();    // remove all pointed flag of the data items
 
-    void addItems(QList<DataItem*>* list);  // add dataitem to items
+    void removeAllPointed();    // remove all pointed flag of the data items
+    void resetIndex();  // set index to original index
+    void resetYPos();   // set ypos to original YPOS
+
+    void addItems(QList<DataItem *> *list);  // add dataitem to items
 
 private:
     QString name;
@@ -33,6 +36,10 @@ private:
     QString dataPath;   // path to resources
     QList<DataItem*>* items;
     QMap<DataItem*, int> origIndex;
+
+    static const double YPOS = 100;  // yposition
+
+
 };
 
 #endif // DATASET_H

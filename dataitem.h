@@ -9,8 +9,10 @@ class DataItem : public QGraphicsItem
 public:
     DataItem(double size = 1, double width = 10, double sceneOffset = 10,
     double scenePosY = 0, int index = 0 );
+    /*
     DataItem(const DataItem* that);
     DataItem& operator=(const DataItem &right);
+    */
     ~DataItem();
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     QPainterPath shape() const Q_DECL_OVERRIDE;
@@ -40,6 +42,7 @@ private:
     double sceneOffset; //margin between graphics window and first data item
     double scenePosX;
     double scenePosY;
+
     int index;   //index of item in dataset
     int isPointed;  // indicate if this data item is currently being processed. 1 for yes
 

@@ -23,7 +23,7 @@ DataSet::~DataSet()
     delete items;
 }
 
-void DataSet::addItems(QList<DataItem*>* list){
+void DataSet::addItems(QList<DataItem *> *list){
 
     foreach (DataItem* item, *list) {
         items->append(item);
@@ -71,7 +71,7 @@ void DataSet::setItems(){
     // initialize DataItems based on the list of string numbers
     qDebug() << dataList.size();
     for (int i = 0; i < dataList.size(); i++) {
-        DataItem* item = new DataItem(dataList.at(i).toDouble(), 20, 100, 100, i);
+        DataItem* item = new DataItem(dataList.at(i).toDouble(), 20, 100, YPOS, i);
         (*items) << item;
        origIndex[item] = i;
     }
@@ -99,4 +99,8 @@ double DataSet::getSize(){
      }
  }
 
-
+void DataSet::resetYPos() {
+    foreach (DataItem* item, *items) {
+        item->setScenePosY(YPOS);
+    }
+}

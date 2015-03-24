@@ -12,7 +12,7 @@ DataItem::DataItem(double size, double width , double sceneOffset ,
     isPointed = 0;  // initially the data is not pointed
     scenePosX = sceneOffset + index * width;
 }
-
+/*
 DataItem::DataItem(const DataItem* that) {
     size = that->getSize(); //size of the current data
     width = that->getWidth();
@@ -43,7 +43,7 @@ DataItem& DataItem::operator=(const DataItem &that){
         return *this;
     }
 }
-
+*/
 QColor DataItem::getColor() const {
     return color;
 }

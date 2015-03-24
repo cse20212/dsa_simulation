@@ -40,12 +40,12 @@ MainWindow::~MainWindow()
 void MainWindow::createActions() {
     nextFrame = new QAction(tr("Next"),this);
     nextFrame->setStatusTip(tr("Next Step"));
-    connect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
-    connect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+    //connect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
+    //connect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
 
     previousFrame = new QAction(tr("Back"),this);
     previousFrame->setStatusTip(tr("Previous Step"));
-    connect(previousFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(backAlg()) );
+    //connect(previousFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(backAlg()) );
     //updateDataGraphics();
 }
 
@@ -158,7 +158,10 @@ void MainWindow::initGraphicsItem() {
         // just get the first match, as there can only be one
         if (i != currentDataMap.end() && i.key() == button) {
             DataSet* set = currentDataMap[button];
+            // reset data to original
             set->resetIndex();
+            set->resetYPos();
+            set->removeAllPointed();
             currentDataSet = set;
             currentAlgorithm->setDataSet(currentDataSet);
             currentAlgorithm->resetCounter();
@@ -179,11 +182,19 @@ void MainWindow::initGraphicsItem() {
          QMap<QRadioButton*, Algorithm*>::const_iterator i = currentAlgMap.find(button);
          // just get the first match, as there can only be one
          if (i != currentAlgMap.end() && i.key() == button) {
+             // disconnect next button from previous algorithm advanceAlg
+             disconnect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
+             disconnect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+             // connect current alg with next button
              Algorithm* alg = currentAlgMap[button];
+             connect(nextFrame, SIGNAL(triggered()), alg, SLOT(advanceAlg()) );
+             connect(alg, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+
              currentAlgorithm = alg;
 
              currentDataSet->resetIndex();
              currentDataSet->removeAllPointed();
+             currentDataSet->resetYPos();
              currentAlgorithm->setDataSet(currentDataSet);
              currentAlgorithm->resetCounter();
 
@@ -199,3 +210,5 @@ void MainWindow::initGraphicsItem() {
 
 
   }
+
+
