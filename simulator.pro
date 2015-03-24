@@ -18,18 +18,16 @@ SOURCES += main.cpp\
     dataset.cpp \
     dataitem.cpp \
     genealgorithm.cpp \
-    insertionsort.cpp \
-    selectionsort.cpp \
-    mergesort.cpp
+    tracereader.cpp \
+    tracewriter.cpp
 
 HEADERS  += mainwindow.h \
     algorithm.h \
     dataset.h \
     dataitem.h \
     genealgorithm.h \
-    insertionsort.h \
-    selectionsort.h \
-    mergesort.h
+    tracereader.h \
+    tracewriter.h
 
 FORMS    += mainwindow.ui
 

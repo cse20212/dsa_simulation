@@ -16,13 +16,13 @@ public:
     ~GeneAlgorithm();
 
     void setAlgList();
-    QList<Algorithm*> getAlgList();
+    QList<QString> getAlgList();
     void setDataList();
     QList<DataSet*> getDataList();
 
 private:
     QString name;
-    QList<Algorithm*> algList;
+    QList<QString> algList;
     QList<DataSet*> dataList;
 };
 

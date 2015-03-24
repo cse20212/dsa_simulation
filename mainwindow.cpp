@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
         currentDataSet = currentDataList[0];
     if (currentAlgList.size() >= 1)
         currentAlgorithm = currentAlgList[0];
-    currentAlgorithm->setDataSet(currentDataSet);
+    //currentAlgorithm->setDataSet(currentDataSet);
 
     grid->addWidget(createAlgorithmGroup(), 0, 0);
     grid->addWidget(createDataGroup(), 1, 0);
@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowTitle(tr("Algorithm Animation"));
     resize(480, 320);
+
 }
 
 MainWindow::~MainWindow()
@@ -40,13 +41,21 @@ MainWindow::~MainWindow()
 void MainWindow::createActions() {
     nextFrame = new QAction(tr("Next"),this);
     nextFrame->setStatusTip(tr("Next Step"));
-    //connect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
-    //connect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+    connect(nextFrame, SIGNAL(triggered()), this, SLOT(go_forward()) );
 
     previousFrame = new QAction(tr("Back"),this);
     previousFrame->setStatusTip(tr("Previous Step"));
-    //connect(previousFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(backAlg()) );
-    //updateDataGraphics();
+    connect(previousFrame, SIGNAL(triggered()), this, SLOT(go_back()) );
+}
+
+void MainWindow::go_forward(){
+    currentDataSet->go_forward();
+    graphicsScene->advance();
+}
+
+void MainWindow::go_back(){
+    currentDataSet->go_back();
+    graphicsScene->advance();
 }
 
 void MainWindow::createToolBars() {
@@ -56,25 +65,18 @@ void MainWindow::createToolBars() {
     animationToolBar->addAction(previousFrame);
 }
 
-void MainWindow::updateDataGraphics() {
-    foreach (DataItem* item, *(currentAlgorithm->getDataSet())->getItems()){
-        item->setPos(item->getScenePosX(), item->getScenePosY());
-    }
-
-}
-
 QGroupBox *MainWindow::createAlgorithmGroup() {
     QGroupBox *groupBox = new QGroupBox(tr("Algorithms"));
     QVBoxLayout *vbox = new QVBoxLayout;
-    foreach (Algorithm* alg, currentAlgList){
-        QRadioButton *radioData = new QRadioButton(alg->getName());
+    foreach (QString alg, currentAlgList){
+        QRadioButton *radioData = new QRadioButton(alg);
         currentAlgMap[radioData] = alg;
         vbox->addWidget(radioData);
 
 
     }
-    QList<QRadioButton *> buttons = currentAlgMap.keys();
-    QMap<QRadioButton*, Algorithm*>::const_iterator kvp = currentAlgMap.constBegin();
+
+    QMap<QRadioButton*, QString>::const_iterator kvp = currentAlgMap.constBegin();
     while (kvp != currentAlgMap.constEnd()) {
         if (kvp.value() == currentAlgorithm) {
             (kvp.key())->setChecked(true);
@@ -92,7 +94,7 @@ QGroupBox *MainWindow::createDataGroup() {
     QGroupBox *groupBox = new QGroupBox(tr("Data"));
     QVBoxLayout *vbox = new QVBoxLayout;
     foreach (DataSet* set, currentDataList){
-        QRadioButton *radioData = new QRadioButton(set->geName());
+        QRadioButton *radioData = new QRadioButton(set->getName());
         // put dataset and corresponding radiobutton in map
         currentDataMap[radioData] = set;
         vbox->addWidget(radioData);
@@ -107,7 +109,8 @@ QGroupBox *MainWindow::createDataGroup() {
         connect(kvp.key(), SIGNAL(clicked()), this, SLOT(on_data_radio_checked()));
         ++kvp;
     }
-
+    //set data set algorithm name
+    currentDataSet->setAlgName(currentAlgorithm);
     vbox->addStretch(1);
     groupBox->setLayout(vbox);
     return groupBox;
@@ -118,29 +121,26 @@ QGraphicsView *MainWindow::createGraphicsWindow() {
     graphicsView = new QGraphicsView();
     graphicsScene = new QGraphicsScene();
 
-    initGraphicsItem();
-
     graphicsView->setScene(graphicsScene);
+    initGraphicsItem();
     return graphicsView;
 }
 
 void MainWindow::initGraphicsItem() {
-    //graphicsScene->clear();
-    //QList<QGraphicsItem *> topLevels;
+
     foreach (QGraphicsItem *item, graphicsScene->items()) {
         if (!item->parentItem())
             //topLevels << item;
             graphicsScene->removeItem(item);
     }
-    //qDeleteAll(topLevels);
     // update viewport
     (graphicsView->viewport())->update();
 
     graphicsScene->setSceneRect(QRect(QPoint(0,0), QPoint(graphicsView->width(), graphicsView->height())));
     graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    QList<DataItem *>* dataItems = (currentAlgorithm->getDataSet())->getItems();
-    for (int i = 0; i < dataItems->size(); ++i) {
-           DataItem *dataItem = (*dataItems)[i];
+    QList<DataItem *> dataItems = (currentDataSet)->getItems();
+    for (int i = 0; i < dataItems.size(); ++i) {
+           DataItem *dataItem = dataItems[i];
            double scenePosX = dataItem->getScenePosX();
            double scenePosY = dataItem->getScenePosY();
            dataItem->setPos( scenePosX, scenePosY);
@@ -159,12 +159,10 @@ void MainWindow::initGraphicsItem() {
         if (i != currentDataMap.end() && i.key() == button) {
             DataSet* set = currentDataMap[button];
             // reset data to original
-            set->resetIndex();
-            set->resetYPos();
-            set->removeAllPointed();
+
             currentDataSet = set;
-            currentAlgorithm->setDataSet(currentDataSet);
-            currentAlgorithm->resetCounter();
+            currentDataSet->initState(currentAlgorithm);
+
             initGraphicsItem();
         } else {
             qDebug() << "Error in on_data_radio_checked";
@@ -179,35 +177,21 @@ void MainWindow::initGraphicsItem() {
       // e.g. check with member variable _foobarButton
 
          QRadioButton* button = dynamic_cast<QRadioButton*>(sender());
-         QMap<QRadioButton*, Algorithm*>::const_iterator i = currentAlgMap.find(button);
+         QMap<QRadioButton*, QString>::const_iterator i = currentAlgMap.find(button);
          // just get the first match, as there can only be one
          if (i != currentAlgMap.end() && i.key() == button) {
-             // disconnect next button from previous algorithm advanceAlg
-             disconnect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
-             disconnect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
-             // connect current alg with next button
-             Algorithm* alg = currentAlgMap[button];
-             connect(nextFrame, SIGNAL(triggered()), alg, SLOT(advanceAlg()) );
-             connect(alg, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+
+             QString alg = currentAlgMap[button];
 
              currentAlgorithm = alg;
-
-             currentDataSet->resetIndex();
-             currentDataSet->removeAllPointed();
-             currentDataSet->resetYPos();
-             currentAlgorithm->setDataSet(currentDataSet);
-             currentAlgorithm->resetCounter();
-
-             // connect current algrithm with buttons
-             connect(nextFrame, SIGNAL(triggered()), currentAlgorithm, SLOT(advanceAlg()) );
-             connect(currentAlgorithm, SIGNAL(updateGraphics()), graphicsScene, SLOT(advance()) );
+             // warning:: must set alg name before init state
+             currentDataSet->initState(alg);
 
              initGraphicsItem();
          } else {
              qDebug() << "Error in on_alg_raio_checked";
              return;
          }
-
 
   }
 
