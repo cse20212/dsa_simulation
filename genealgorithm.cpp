@@ -3,6 +3,7 @@
 #include <QDir>
 #include "algorithm.h"
 #include "insertionsort.h"
+#include "selectionsort.h"
 #include "mergesort.h"
 #include "dataset.h"
 
@@ -30,6 +31,8 @@ void GeneAlgorithm::setAlgList(){
            algList.append(insertionSort);
            MergeSort *mergeSort = new MergeSort();
            algList.append(mergeSort);
+           SelectionSort *selectionSort = new SelectionSort();
+           algList.append(selectionSort);
 
     }
 }
