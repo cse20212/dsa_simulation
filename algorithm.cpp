@@ -19,6 +19,7 @@ Algorithm::~Algorithm()
 
 }
 
+/*
 DataSet* Algorithm::getDataSet() {
     return mySet;
 }
@@ -26,6 +27,7 @@ DataSet* Algorithm::getDataSet() {
 void Algorithm::setDataSet(DataSet *set){
     mySet = set;
 }
+*/
 
 // set pseudocode file
 QString Algorithm::getCodeFilePath(){

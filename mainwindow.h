@@ -30,23 +30,24 @@ public:
     void initGraphicsItem();    // add items in currentDataSet to scene
     void createActions();
     void createToolBars();
-    void updateDataGraphics();
 
 private slots:
     void on_data_radio_checked();
     void on_alg_radio_checked();
+    void go_back();
+    void go_forward();
 
 private:
     Ui::MainWindow *ui;
     GeneAlgorithm currentGenAlg;   // default constructor get sorting
-    QList<Algorithm *> currentAlgList;
+    QList<QString> currentAlgList;
     QList<DataSet *> currentDataList;
     QMap< QRadioButton*, DataSet *> currentDataMap;
-    QMap< QRadioButton*, Algorithm *> currentAlgMap;
+    QMap< QRadioButton*, QString> currentAlgMap;
 
      // active dataset and algorithm
     DataSet *currentDataSet;
-    Algorithm *currentAlgorithm;
+    QString currentAlgorithm;
 
     QGraphicsView *graphicsView;
     QGraphicsScene *graphicsScene;

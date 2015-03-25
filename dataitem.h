@@ -33,6 +33,8 @@ public:
     void setIndex(int in);
     void setpointed(int p);
 
+    int getId();
+
 protected:
     void advance(int step) Q_DECL_OVERRIDE;
 
@@ -43,6 +45,7 @@ private:
     double scenePosX;
     double scenePosY;
 
+    int id; // number id of the item; original indexed
     int index;   //index of item in dataset
     int isPointed;  // indicate if this data item is currently being processed. 1 for yes
 

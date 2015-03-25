@@ -7,10 +7,12 @@
 DataItem::DataItem(double size, double width , double sceneOffset ,
                    double scenePosY, int index ):size(size), width(width),
     sceneOffset(sceneOffset), scenePosY(scenePosY), index(index),
-    color(100, 125, 255), shapeChoice(1)
+    color(100, 125, 255), shapeChoice(1), id(index)
 {
     isPointed = 0;  // initially the data is not pointed
     scenePosX = sceneOffset + index * width;
+
+
 }
 /*
 DataItem::DataItem(const DataItem* that) {
@@ -60,6 +62,10 @@ int DataItem::getShapeChoice() const {
     return shapeChoice;
 }
 
+int DataItem::getId(){
+    return id;
+}
+
 DataItem::~DataItem()
 {
 
@@ -71,6 +77,7 @@ void DataItem::advance(int step)
         return;
 
     setPos(scenePosX, scenePosY);
+    update();
 }
 
 QRectF DataItem::boundingRect() const
@@ -83,13 +90,14 @@ QRectF DataItem::boundingRect() const
 void DataItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     // Body
-    painter->setBrush(color);
-    painter->drawRect(-width/2, 0 , width , -size);
+
     if (isPointed) {
         QColor c(255, 0, 0);
-        painter->setBrush(c);
-        painter->drawRect(-width/2, 0 , width , -size);
+        painter->setBrush(c);        
+    } else {
+        painter->setBrush(color);
     }
+    painter->drawRect(-width/2, 0 , width , -size);
 
 }
 // p is 1 indicates data is currently being processed, 0 otherwise

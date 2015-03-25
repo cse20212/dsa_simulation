@@ -12,13 +12,13 @@ class Algorithm: public QObject
 {
     Q_OBJECT
 public:
-    Algorithm(QString name = "sorting", QString genAlgName = "Random");
+    Algorithm(QString name = "sorting", QString genAlgName = "InsertionSort");
     ~Algorithm();
 
-
+/*
     DataSet *getDataSet();
     void setDataSet(DataSet *set);
-
+*/
     QString getCodeFilePath();
     void setCodeFilePath();    // set code file according to general algorithm name and its specific name
     QString getName();
@@ -28,12 +28,12 @@ private slots:
     virtual void advanceAlg()=0;   // pure virtual; set dataset to the state after next step
     virtual void backAlg()=0;
 signals:
-    virtual void updateGraphics()=0;
+    void updateGraphics();
 private:
     QString name;
     QString genAlgName; // name of its corresponding general alg
     QString codeFilePath;
-    DataSet *mySet;  // dataSet associated with this alg
+    //DataSet *mySet;  // dataSet associated with this alg
 
 };
 

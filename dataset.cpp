@@ -5,35 +5,34 @@
 #include <QDebug>
 #include <QDir>
 
-DataSet::DataSet(QString genAlgName, QString name)
+
+DataSet::DataSet(QString genAlgName, QString name, QString algName):YPOS(100)
 {
-    items = new QList<DataItem*>();
+    reader = new TraceReader(name, genAlgName, algName);
     this->name = name;
     this->genAlgName = genAlgName;
+    this->algName = algName;
     setDataPath();
     setItems();
+
+    writer = new TraceWriter(name, genAlgName, algName);
+    currentTraceIndex = 0;
+
+    // check if trace file exists
+    checkTraceFile();
 }
 
 DataSet::~DataSet()
 {
-    // not sure how to delete every item
-    for (qint8 i = 0; i < items->size(); i++) {
-        delete items->at(i);
-    }
-    delete items;
+
+    delete reader;
+    delete writer;
 }
 
-void DataSet::addItems(QList<DataItem *> *list){
-
-    foreach (DataItem* item, *list) {
-        items->append(item);
-    }
-}
-
-void DataSet::removeAllPointed(){
-    foreach (DataItem* item, *items) {
-        item->setpointed(0);
-        item->update();
+void DataSet::checkTraceFile(){
+    if (!writer->fileEixsts()) {
+        writer->writeTrace();
+        qDebug() << "File not exits!";
     }
 }
 
@@ -42,11 +41,21 @@ void DataSet::setDataPath(){
     dataPath = (QString)":/data/" + genAlgName + "/" + name + ".txt";
 }
 
+void DataSet::setAlgName(QString name) {
+    algName = name;
+    reader->setAlgName(name);
+    writer->setAlgName(name);
+}
+
+QString DataSet::getAlgName(){
+    return algName;
+}
+
 QString DataSet::getDataPath(){
     return dataPath;
 }
 
-QString DataSet::geName(){
+QString DataSet::getName(){
     return name;
 }
 
@@ -54,8 +63,8 @@ QString DataSet::getGenAlgName(){
     return genAlgName;
 }
 
-QList<DataItem *>* DataSet::getItems(){
-    return items;
+QList<DataItem *> DataSet::getItems(){
+    return itemDic.values();
 }
 // read file and set items
 void DataSet::setItems(){
@@ -72,35 +81,78 @@ void DataSet::setItems(){
     qDebug() << dataList.size();
     for (int i = 0; i < dataList.size(); i++) {
         DataItem* item = new DataItem(dataList.at(i).toDouble(), 20, 100, YPOS, i);
-        (*items) << item;
-       origIndex[item] = i;
+
+       itemDic.insert(item->getId(), item);
     }
+
+    dataFile.close();
 }
 
 double DataSet::getSize(){
-    return items->size();
+    return itemDic.size();
 }
 
- QMap<DataItem*, int> DataSet::getOrigIndex(){
-     return origIndex;
- }
 
- void DataSet::resetIndex(){
-     int n = items->size(); // number of items
-     DataItem* newItems[n]; //helper array to store the right sequence of data
-     foreach (DataItem* item, *items) {
-         int index = origIndex[item];
-         item->setIndex(index);
-         newItems[index] = item;
-     }
-     items->clear();
-     for (int i = 0; i < n; i++) {
-         items->append(newItems[i]);
-     }
- }
-
-void DataSet::resetYPos() {
-    foreach (DataItem* item, *items) {
-        item->setScenePosY(YPOS);
+void DataSet::go_back() {
+    if (currentTraceIndex > 0) {
+        currentTraceIndex--;
+        QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
+        if (stateList.size()>0) {
+            setDataState(stateList);
+        } else {
+            currentTraceIndex++;    //read not success; reset
+            qDebug() << "stateList is null!";
+        }
+    } else {
+        qDebug() << "Already reach the end!";
     }
 }
+
+void DataSet::go_forward() {
+        currentTraceIndex++;
+        QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
+        if (stateList.size()>0) {
+            setDataState(stateList);
+        } else {
+            currentTraceIndex--;    //read not success; reset
+            qDebug() << "stateList is null! might have reached the end of algorithm";
+        }
+}
+
+void DataSet::initState(QString algName) {
+    setAlgName(algName);
+
+    checkTraceFile();   // check if new alg data combination has corresponding trace file
+    currentTraceIndex = 0;
+    QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
+    if (stateList.size()>0)
+        setDataState(stateList);
+    else
+        qDebug() << "stateList is null! might have reached the end of algorithm";
+}
+ void DataSet::setDataState(QList<QStringList> &list){
+     int n = list.size();
+     QStringList indexList, pointedList;
+     if (n >= 2) {
+        indexList = list[0];
+        pointedList = list[1];
+     }
+     // set indices first
+     if (indexList.size() != itemDic.size()) {
+         qDebug() << "index size not correspond!";
+         qDebug() << indexList;
+     } else {
+         for (int i = 0; i < indexList.size(); i++) {
+             DataItem *item = itemDic[indexList.at(i).toInt()];
+             //set position
+             item->setIndex(i);
+             //set pointed flag
+             if (pointedList.contains(indexList.at(i))) {
+                 item->setpointed(1);
+             } else {
+                 item->setpointed(0);
+             }
+         }
+
+     }
+ }

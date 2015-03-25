@@ -7,38 +7,48 @@
 #include <QString>
 #include <QList>
 #include "dataitem.h"
+#include "tracereader.h"
+#include "tracewriter.h"
 
 class DataSet
 {
 public:
-    DataSet(QString name = "inverse", QString genAlgName = "sorting");
+    DataSet(QString genAlgName = "sorting",QString name = "Inverse",  QString algName = "InsertionSort");
     ~DataSet();
 
     void setDataPath();
+    void setAlgName(QString name);
     QString getDataPath();
-    QString geName();
+    QString getName();
     QString getGenAlgName();
-    QList<DataItem *> *getItems();
-    QMap<DataItem*, int> getOrigIndex();
+    QString getAlgName();
+    QList<DataItem *> getItems();
 
     void setItems();
     double getSize();
 
-    void removeAllPointed();    // remove all pointed flag of the data items
-    void resetIndex();  // set index to original index
-    void resetYPos();   // set ypos to original YPOS
 
-    void addItems(QList<DataItem *> *list);  // add dataitem to items
+    void go_back();   // read trace file line index to update dataItems
+    void go_forward();
+    void setDataState(QList<QStringList> &list);    // set datastate based on
+    void initState(QString algName);   // set the state to initial state
+
+    void checkTraceFile();  //check if trace file exists for this algorithm, if not write the file
 
 private:
     QString name;
     QString genAlgName;
+    QString algName;    // name of specific algorithm acting on
     QString dataPath;   // path to resources
-    QList<DataItem*>* items;
-    QMap<DataItem*, int> origIndex;
 
-    static const double YPOS = 100;  // yposition
 
+    QMap<int, DataItem*> itemDic;   // dictionary of items based on item id
+
+    double YPOS;  // yposition
+
+    TraceReader* reader;
+    TraceWriter* writer;
+    int currentTraceIndex;
 
 };
 
