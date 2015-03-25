@@ -65,6 +65,20 @@ void TraceWriter::insertionSortWrite(){
     /******************
      * algorithm logic
      * *******************/
+
+    // write the initial state
+    // write a line to out
+    QString inputString = "";
+    for(int index = 0; index < dataDic.keys().size(); index++) {
+        inputString =  QString(inputString+"%1").arg(dataDic[index].id);
+        if (index != dataDic.keys().size()-1)
+            inputString = (QString)inputString + ",";
+    }
+    inputString = QString(inputString + ";;\n");
+    //qDebug() << dataDic.keys()[k];
+    out << inputString;
+
+
     int n = dataDic.size();
 
     for (int i = 1; i < n; i++) {

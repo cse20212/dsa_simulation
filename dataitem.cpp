@@ -77,9 +77,7 @@ void DataItem::advance(int step)
         return;
 
     setPos(scenePosX, scenePosY);
-    if (isPointed) {
-        update();
-    }
+    update();
 }
 
 QRectF DataItem::boundingRect() const

@@ -97,11 +97,12 @@ void DataSet::go_back() {
     if (currentTraceIndex > 0) {
         currentTraceIndex--;
         QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
-        if (stateList.size()>0)
+        if (stateList.size()>0) {
             setDataState(stateList);
-        else
+        } else {
+            currentTraceIndex++;    //read not success; reset
             qDebug() << "stateList is null!";
-
+        }
     } else {
         qDebug() << "Already reach the end!";
     }
@@ -110,11 +111,12 @@ void DataSet::go_back() {
 void DataSet::go_forward() {
         currentTraceIndex++;
         QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
-        if (stateList.size()>0)
+        if (stateList.size()>0) {
             setDataState(stateList);
-        else
+        } else {
+            currentTraceIndex--;    //read not success; reset
             qDebug() << "stateList is null! might have reached the end of algorithm";
-
+        }
 }
 
 void DataSet::initState(QString algName) {
@@ -141,11 +143,16 @@ void DataSet::initState(QString algName) {
          qDebug() << indexList;
      } else {
          for (int i = 0; i < indexList.size(); i++) {
-             itemDic[indexList.at(i).toInt()]->setIndex(i);
+             DataItem *item = itemDic[indexList.at(i).toInt()];
+             //set position
+             item->setIndex(i);
+             //set pointed flag
+             if (pointedList.contains(indexList.at(i))) {
+                 item->setpointed(1);
+             } else {
+                 item->setpointed(0);
+             }
          }
-         for (int i = 0; i < pointedList.size(); i++) {
-             itemDic[pointedList.at(i).toInt()]->setpointed(1);
-             itemDic[pointedList.at(i).toInt()]->update();
-         }
+
      }
  }
