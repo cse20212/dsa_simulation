@@ -12,9 +12,9 @@ public:
     ~TraceReader();
 
     void setAlgName(QString algName);
-    QList<QStringList> simpleSortReader(int index); // read the trace file for simple sorting algorithm
+    QString simpleSortReader(int index, QMap<int, DataItem *> &itemDic); // read the trace file for simple sorting algorithm
                                                     // and reset the dataitems in set
-
+    QString recursiveSortReader(int index, QMap<int, DataItem *> &itemDic);
 private:
     QString dataName;
     QString genAlgName;

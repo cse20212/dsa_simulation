@@ -12,7 +12,7 @@ DataItem::DataItem(double size, double width , double sceneOffset ,
 
     scenePosX = sceneOffset + index * width;
     normalYPos = scenePosY;
-    downYPos = scenePosY + 100;
+    downYPos = scenePosY + 50;
 
 }
 

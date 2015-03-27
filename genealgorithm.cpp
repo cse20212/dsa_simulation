@@ -26,6 +26,7 @@ void GeneAlgorithm::setAlgList(){
     if (name == "sorting"){
         // initialize soring algorithm classes
            algList.append("InsertionSort");
+           algList.append("MergeSort");
     }
 }
 

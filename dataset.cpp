@@ -96,12 +96,18 @@ double DataSet::getSize(){
 QString DataSet::go_back() {
     if (currentTraceIndex > 0) {
         currentTraceIndex--;
-        QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
-        if (stateList.size()>0) {
-            return setDataState(stateList);
+        QString stateString;
+        if (algName == "InsertionSort") {
+            stateString = reader->simpleSortReader(currentTraceIndex, itemDic);
+        } else {
+            stateString = reader->recursiveSortReader(currentTraceIndex, itemDic);
+        }
+
+        if (!stateString.contains("Error")) {
+            return stateString;
         } else {
             currentTraceIndex++;    //read not success; reset
-            qDebug() << "stateList is null!";
+            qDebug() << "state string is error!";
         }
     } else {
         qDebug() << "Already reach the end!";
@@ -113,9 +119,14 @@ QString DataSet::go_back() {
 
 QString DataSet::go_forward() {
         currentTraceIndex++;
-        QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
-        if (stateList.size()>0) {
-            return setDataState(stateList);
+        QString stateString;
+        if (algName == "InsertionSort") {
+            stateString = reader->simpleSortReader(currentTraceIndex, itemDic);
+        } else {
+            stateString = reader->recursiveSortReader(currentTraceIndex, itemDic);
+        }
+        if (!stateString.contains("Error")) {
+            return stateString;
         } else {
             currentTraceIndex--;    //read not success; reset
             qDebug() << "stateList is null! might have reached the end of algorithm";
@@ -129,12 +140,24 @@ void DataSet::initState(QString algName) {
 
     checkTraceFile();   // check if new alg data combination has corresponding trace file
     currentTraceIndex = 0;
-    QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
-    if (stateList.size()>0)
-        setDataState(stateList);
+    QString stateString;
+    if (algName == "InsertionSort") {
+        stateString = reader->simpleSortReader(currentTraceIndex, itemDic);
+    } else {
+        stateString = reader->recursiveSortReader(currentTraceIndex, itemDic);
+    }
+
+    if (!stateString.contains("Error"))
+        //return stateString;
+        stateString = "Initialize";
     else
         qDebug() << "stateList is null! might have reached the end of algorithm";
 }
+
+
+/********************
+ * not in use currently
+ * *********************/
  QString DataSet::setDataState(QList<QStringList> &list){
      QString stateString = "Current Position indices in loops: ";
 
