@@ -5,6 +5,7 @@
 #include <QGroupBox>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QTextEdit>
 #include <QRadioButton>
 #include <QList>
 #include <QMap>
@@ -27,6 +28,8 @@ public:
     QGroupBox *createAlgorithmGroup();
     QGroupBox *createDataGroup();
     QGraphicsView *createGraphicsWindow();
+    QTextEdit *createStateTextBox();
+
     void initGraphicsItem();    // add items in currentDataSet to scene
     void createActions();
     void createToolBars();
@@ -51,6 +54,7 @@ private:
 
     QGraphicsView *graphicsView;
     QGraphicsScene *graphicsScene;
+    QTextEdit *algStateTextBox;
 
     // toolbars and menus
     QToolBar *animationToolBar;

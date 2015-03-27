@@ -28,9 +28,9 @@ public:
     double getSize();
 
 
-    void go_back();   // read trace file line index to update dataItems
-    void go_forward();
-    void setDataState(QList<QStringList> &list);    // set datastate based on
+    QString go_back();   // read trace file line index to update dataItems
+    QString go_forward();
+    QString setDataState(QList<QStringList> &list);    // set datastate based on
     void initState(QString algName);   // set the state to initial state
 
     void checkTraceFile();  //check if trace file exists for this algorithm, if not write the file

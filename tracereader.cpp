@@ -37,9 +37,14 @@ QList<QStringList> TraceReader::simpleSortReader(int index) {
         QStringList traceList = line.split(";");
         QStringList indexList = traceList[0].split(",");
         QStringList pointedList = traceList[1].split(",");
+        QStringList moveDownList;
 
         stateList.append(indexList);
         stateList.append(pointedList);
+        if (traceList.size() > 2) {
+            moveDownList = traceList[2].split(",");
+            stateList.append(moveDownList);
+        }
     } else {
         qDebug() <<  "Error: reading line";
     }

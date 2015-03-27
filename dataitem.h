@@ -3,6 +3,7 @@
 #define DATAITEM_H
 
 #include <QGraphicsItem>
+enum ItemFlag {pointed = 1, copyDown = 2};
 
 class DataItem : public QGraphicsItem
 {
@@ -24,14 +25,17 @@ public:
     double getSize() const;
     int getIndex() const;
     double getSceneOffset() const;
-    int getIsPointed() const;
+
     double getWidth() const;
     QColor getColor() const;
     int getShapeChoice() const;
     void setScenePosX(double x);
     void setScenePosY(double y);
     void setIndex(int in);
-    void setpointed(int p);
+
+
+    void setFlag(ItemFlag);
+    void resetFlag(ItemFlag);
 
     int getId();
 
@@ -47,10 +51,14 @@ private:
 
     int id; // number id of the item; original indexed
     int index;   //index of item in dataset
-    int isPointed;  // indicate if this data item is currently being processed. 1 for yes
 
     QColor color;
     int shapeChoice;
+
+    QList<ItemFlag>  flags; // flags for this item
+
+    int normalYPos;
+    int downYPos;
 };
 
 #endif // DATAITEM_H

@@ -9,49 +9,17 @@ DataItem::DataItem(double size, double width , double sceneOffset ,
     sceneOffset(sceneOffset), scenePosY(scenePosY), index(index),
     color(100, 125, 255), shapeChoice(1), id(index)
 {
-    isPointed = 0;  // initially the data is not pointed
+
     scenePosX = sceneOffset + index * width;
-
+    normalYPos = scenePosY;
+    downYPos = scenePosY + 100;
 
 }
-/*
-DataItem::DataItem(const DataItem* that) {
-    size = that->getSize(); //size of the current data
-    width = that->getWidth();
-    sceneOffset = that->getSceneOffset(); //margin between graphics window and first data item
-    scenePosX = that->getScenePosX();
-    scenePosY = that->getScenePosY();
-    index = that->getIndex();   //index of item in dataset
-    isPointed = that->getIsPointed();  // indicate if this data item is currently being processed. 1 for yes
 
-    color = that->getColor();
-    shapeChoice = that->getShapeChoice();
-}
-
-DataItem& DataItem::operator=(const DataItem &that){
-    if (this == &that) {
-        return *this;
-    } else {
-        size = that.getSize(); //size of the current data
-        width = that.getWidth();
-        sceneOffset = that.getSceneOffset(); //margin between graphics window and first data item
-        scenePosX = that.getScenePosX();
-        scenePosY = that.getScenePosY();
-        index = that.getIndex();   //index of item in dataset
-        isPointed = that.getIsPointed();  // indicate if this data item is currently being processed. 1 for yes
-
-        color = that.getColor();
-        shapeChoice = that.getShapeChoice();
-        return *this;
-    }
-}
-*/
 QColor DataItem::getColor() const {
     return color;
 }
-int DataItem::getIsPointed() const {
-    return isPointed;
-}
+
 double DataItem::getSceneOffset() const{
     return sceneOffset;
 }
@@ -89,20 +57,28 @@ QRectF DataItem::boundingRect() const
 
 void DataItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    // Body
-
-    if (isPointed) {
-        QColor c(255, 0, 0);
-        painter->setBrush(c);        
-    } else {
-        painter->setBrush(color);
+    //default
+    painter->setBrush(color);
+    scenePosY = normalYPos;
+    // change through flags
+    foreach(ItemFlag f, flags) {
+        switch(f){
+           case pointed:
+           {
+                QColor c(255, 0, 0);
+                painter->setBrush(c);
+                break;
+          }
+          case copyDown:
+          {
+            scenePosY = downYPos;
+            setPos(scenePosX, scenePosY);
+             break;
+          }
+        }
     }
     painter->drawRect(-width/2, 0 , width , -size);
 
-}
-// p is 1 indicates data is currently being processed, 0 otherwise
-void DataItem::setpointed(int p) {
-    isPointed  = p;
 }
 
 // used for collision detection...
@@ -141,4 +117,18 @@ int DataItem::getIndex() const {
 void DataItem::setIndex(int in) {
     index = in;
     scenePosX = index*width + sceneOffset;
+}
+
+void DataItem::setFlag(ItemFlag f) {
+    // add a flag to item
+    if (!flags.contains(f)) {
+        flags.append(f);
+    }
+}
+
+void DataItem::resetFlag(ItemFlag f) {
+    // remove this flag from item
+    if (flags.contains(f)) {
+        flags.removeOne(f);
+    }
 }

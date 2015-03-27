@@ -2,12 +2,7 @@
 #include <QString>
 #include <QDir>
 #include "algorithm.h"
-<<<<<<< HEAD
-#include "insertionsort.h"
-#include "selectionsort.h"
-#include "mergesort.h"
-=======
->>>>>>> mergesortBranch
+
 #include "dataset.h"
 
 GeneAlgorithm::GeneAlgorithm(QString name):name(name)
@@ -30,18 +25,7 @@ GeneAlgorithm::~GeneAlgorithm()
 void GeneAlgorithm::setAlgList(){
     if (name == "sorting"){
         // initialize soring algorithm classes
-<<<<<<< HEAD
-           InsertionSort *insertionSort = new InsertionSort();
-           algList.append(insertionSort);
-           MergeSort *mergeSort = new MergeSort();
-           algList.append(mergeSort);
-           SelectionSort *selectionSort = new SelectionSort();
-           algList.append(selectionSort);
-=======
-           //InsertionSort *insertionSort = new InsertionSort();
            algList.append("InsertionSort");
->>>>>>> mergesortBranch
-
     }
 }
 

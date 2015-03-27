@@ -2,6 +2,8 @@
 #define TRACEWRITER_H
 #include<QString>
 #include"dataitem.h"
+#include <QFile>
+#include <QTextStream>
 
 class TraceWriter
 {
@@ -14,17 +16,23 @@ public:
 
     void writeTrace();
     void insertionSortWrite();
+    void mergeSortWrite();
     bool fileEixsts();  // check if current tracefile exists
 private:
-    QString fileName;
-    QString algName;
-    QString genAlgName;
-    QString dataName;
     // helper struct
     struct SData{
         int id;
         int size;
     };
+    QString fileName;
+    QString algName;
+    QString genAlgName;
+    QString dataName;
+
+    //mergesort helper
+    void mergeSort(QTextStream &out, int, int, QMap<int, SData>&);
+    void merge(QTextStream &out, int start, int mid, int end, QMap<int, SData> &data);
+
 };
 
 #endif // TRACEWRITER_H

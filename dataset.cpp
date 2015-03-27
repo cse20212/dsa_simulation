@@ -93,30 +93,35 @@ double DataSet::getSize(){
 }
 
 
-void DataSet::go_back() {
+QString DataSet::go_back() {
     if (currentTraceIndex > 0) {
         currentTraceIndex--;
         QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
         if (stateList.size()>0) {
-            setDataState(stateList);
+            return setDataState(stateList);
         } else {
             currentTraceIndex++;    //read not success; reset
             qDebug() << "stateList is null!";
         }
     } else {
         qDebug() << "Already reach the end!";
+        return "Start of algorithm!";
     }
+
+    return NULL;
 }
 
-void DataSet::go_forward() {
+QString DataSet::go_forward() {
         currentTraceIndex++;
         QList<QStringList> stateList = reader->simpleSortReader(currentTraceIndex);
         if (stateList.size()>0) {
-            setDataState(stateList);
+            return setDataState(stateList);
         } else {
             currentTraceIndex--;    //read not success; reset
             qDebug() << "stateList is null! might have reached the end of algorithm";
+            return "End of Algorithm. Please reset to restart simulation.";
         }
+        return NULL;
 }
 
 void DataSet::initState(QString algName) {
@@ -130,12 +135,17 @@ void DataSet::initState(QString algName) {
     else
         qDebug() << "stateList is null! might have reached the end of algorithm";
 }
- void DataSet::setDataState(QList<QStringList> &list){
+ QString DataSet::setDataState(QList<QStringList> &list){
+     QString stateString = "Current Position indices in loops: ";
+
      int n = list.size();
-     QStringList indexList, pointedList;
+     QStringList indexList, pointedList, moveDownList;
      if (n >= 2) {
         indexList = list[0];
         pointedList = list[1];
+     }
+     if (n >= 3) {
+         moveDownList = list[2];
      }
      // set indices first
      if (indexList.size() != itemDic.size()) {
@@ -143,16 +153,28 @@ void DataSet::initState(QString algName) {
          qDebug() << indexList;
      } else {
          for (int i = 0; i < indexList.size(); i++) {
-             DataItem *item = itemDic[indexList.at(i).toInt()];
-             //set position
-             item->setIndex(i);
-             //set pointed flag
-             if (pointedList.contains(indexList.at(i))) {
-                 item->setpointed(1);
-             } else {
-                 item->setpointed(0);
+             if (indexList.at(i).toInt() >=0 ) {    // if a valid id
+                DataItem *item = itemDic[indexList.at(i).toInt()];
+                //set position
+                 item->setIndex(i);
+                //set pointed flag
+                if (pointedList.contains(indexList.at(i))) {
+                   item->setFlag(pointed);
+
+                   stateString = QString(stateString+"%1 ").arg(i);
+                } else {
+                   item->resetFlag(pointed);
+                }
+                // set movedown flag
+                if (moveDownList.contains(indexList.at(i))) {
+                   item->setFlag(copyDown);
+                } else {
+                   item->resetFlag(copyDown);
+                }
              }
          }
-
      }
+
+     stateString = QString(stateString + "%1").arg("\n");
+     return stateString;
  }

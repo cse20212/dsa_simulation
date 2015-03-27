@@ -24,12 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     grid->addWidget(createAlgorithmGroup(), 0, 0);
     grid->addWidget(createDataGroup(), 1, 0);
     grid->addWidget(createGraphicsWindow(), 0, 1);
+    grid->addWidget(createStateTextBox(), 1, 1);
 
     createActions();
     createToolBars();
 
     setWindowTitle(tr("Algorithm Animation"));
-    resize(480, 320);
+    resize(600, 400);
 
 }
 
@@ -37,7 +38,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 void MainWindow::createActions() {
     nextFrame = new QAction(tr("Next"),this);
     nextFrame->setStatusTip(tr("Next Step"));
@@ -49,12 +49,16 @@ void MainWindow::createActions() {
 }
 
 void MainWindow::go_forward(){
-    currentDataSet->go_forward();
+    algStateTextBox->clear();
+    QString stateString = currentDataSet->go_forward();
+    algStateTextBox->setPlainText(stateString);
     graphicsScene->advance();
 }
 
 void MainWindow::go_back(){
-    currentDataSet->go_back();
+    algStateTextBox->clear();
+    QString stateString = currentDataSet->go_back();
+    algStateTextBox->setPlainText(stateString);
     graphicsScene->advance();
 }
 
@@ -126,6 +130,12 @@ QGraphicsView *MainWindow::createGraphicsWindow() {
     return graphicsView;
 }
 
+QTextEdit *MainWindow::createStateTextBox() {
+    algStateTextBox = new QTextEdit();
+    algStateTextBox->setReadOnly(true);
+    return algStateTextBox;
+}
+
 void MainWindow::initGraphicsItem() {
 
     foreach (QGraphicsItem *item, graphicsScene->items()) {
@@ -183,13 +193,9 @@ void MainWindow::initGraphicsItem() {
 
              QString alg = currentAlgMap[button];
 
-<<<<<<< HEAD
-=======
              currentAlgorithm = alg;
              // warning:: must set alg name before init state
              currentDataSet->initState(alg);
-
->>>>>>> mergesortBranch
              initGraphicsItem();
          } else {
              qDebug() << "Error in on_alg_raio_checked";
