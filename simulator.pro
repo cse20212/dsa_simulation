@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     dataitem.cpp \
     genealgorithm.cpp \
     tracereader.cpp \
-    tracewriter.cpp
+    tracewriter.cpp \
+
 
 HEADERS  += mainwindow.h \
     algorithm.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     dataitem.h \
     genealgorithm.h \
     tracereader.h \
-    tracewriter.h
+    tracewriter.h \
+
 
 FORMS    += mainwindow.ui
 

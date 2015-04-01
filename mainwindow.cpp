@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QRadioButton>
 #include <QDebug>
+#include <QTextBrowser>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,10 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
         currentAlgorithm = currentAlgList[0];
     //currentAlgorithm->setDataSet(currentDataSet);
 
-    grid->addWidget(createAlgorithmGroup(), 0, 0);
-    grid->addWidget(createDataGroup(), 1, 0);
-    grid->addWidget(createGraphicsWindow(), 0, 1);
-    grid->addWidget(createStateTextBox(), 1, 1);
+    grid->addWidget(createAlgorithmGroup(), 0, 0, 2, 1);
+    grid->addWidget(createDataGroup(), 2, 0, 2, 1);
+    grid->addWidget(createGraphicsWindow(), 0, 1, 3, 5);
+    grid->addWidget(createStateTextBox(), 3, 1, 1, 5);
+    grid->addWidget(createPsuedoTextBox(), 0, 6, 4, 3);
 
     createActions();
     createToolBars();
@@ -46,6 +48,7 @@ void MainWindow::createActions() {
     previousFrame = new QAction(tr("Back"),this);
     previousFrame->setStatusTip(tr("Previous Step"));
     connect(previousFrame, SIGNAL(triggered()), this, SLOT(go_back()) );
+
 }
 
 void MainWindow::go_forward(){
@@ -192,16 +195,31 @@ void MainWindow::initGraphicsItem() {
          if (i != currentAlgMap.end() && i.key() == button) {
 
              QString alg = currentAlgMap[button];
-
+             QString codeFilePath = "/Users/marykatewilliams/FinalProject/dsa_simulation/pseudocode/" + currentGenAlg.getName() + "/" + alg + ".txt";
+             QFile psuedoFile(codeFilePath);
+             qDebug() << codeFilePath;
+             psuedoFile.open(QIODevice::ReadOnly);
+             QTextStream stream(&psuedoFile);
+             QString content = stream.readAll();
+             psuedoFile.close();
+             psuedoTextBox->setPlainText(content);
              currentAlgorithm = alg;
              // warning:: must set alg name before init state
              currentDataSet->initState(alg);
              initGraphicsItem();
+
          } else {
              qDebug() << "Error in on_alg_raio_checked";
              return;
          }
 
   }
+
+  QTextBrowser *MainWindow::createPsuedoTextBox() {
+      psuedoTextBox = new QTextBrowser();
+      psuedoTextBox->setReadOnly(true);
+      return psuedoTextBox;
+  }
+
 
 

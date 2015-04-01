@@ -17,6 +17,7 @@ public:
     void writeTrace();
     void insertionSortWrite();
     void mergeSortWrite();
+    void selectionSortWrite();
     bool fileEixsts();  // check if current tracefile exists
 private:
     // helper struct

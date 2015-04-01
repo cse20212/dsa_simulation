@@ -27,6 +27,7 @@ void GeneAlgorithm::setAlgList(){
         // initialize soring algorithm classes
            algList.append("InsertionSort");
            algList.append("MergeSort");
+           algList.append("SelectionSort");
     }
 }
 
@@ -51,5 +52,9 @@ void GeneAlgorithm::setDataList(){
 
 QList<DataSet*> GeneAlgorithm::getDataList(){
     return dataList;
+}
+
+QString GeneAlgorithm::getName(){
+        return name;
 }
 

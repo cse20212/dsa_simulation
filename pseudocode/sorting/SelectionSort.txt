@@ -1,1 +1,7 @@
-selection
+for i= 0:n-1
+    minIndex=i;
+    for j=i+1:n
+        if(a[j] < a[minIndex]) minIndex=j;
+    if(minIndex != i){
+        swap(a[i], a[minIndex]);
+end

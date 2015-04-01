@@ -16,6 +16,7 @@ public:
     ~GeneAlgorithm();
 
     void setAlgList();
+    QString getName();
     QList<QString> getAlgList();
     void setDataList();
     QList<DataSet*> getDataList();

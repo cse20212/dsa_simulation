@@ -9,6 +9,7 @@
 #include <QRadioButton>
 #include <QList>
 #include <QMap>
+#include <QTextBrowser>
 #include "genealgorithm.h"
 #include "algorithm.h"
 #include "dataset.h"
@@ -29,6 +30,7 @@ public:
     QGroupBox *createDataGroup();
     QGraphicsView *createGraphicsWindow();
     QTextEdit *createStateTextBox();
+    QTextBrowser *createPsuedoTextBox();
 
     void initGraphicsItem();    // add items in currentDataSet to scene
     void createActions();
@@ -61,6 +63,8 @@ private:
     QAction *nextFrame;
     QAction *previousFrame;
 
+    //to display psuedocode
+    QTextBrowser *psuedoTextBox;
 };
 
 #endif // MAINWINDOW_H
