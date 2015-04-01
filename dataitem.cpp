@@ -44,7 +44,7 @@ void DataItem::advance(int step)
     if (!step)
         return;
 
-    setPos(scenePosX, scenePosY);
+   // setPos(scenePosX, scenePosY);
     update();
 }
 
@@ -72,11 +72,12 @@ void DataItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
           case copyDown:
           {
             scenePosY = downYPos;
-            setPos(scenePosX, scenePosY);
+            //setPos(scenePosX, scenePosY);
              break;
           }
         }
     }
+    setPos(scenePosX, scenePosY);
     painter->drawRect(-width/2, 0 , width , -size);
 
 }

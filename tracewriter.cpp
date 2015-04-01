@@ -147,61 +147,153 @@ void TraceWriter::mergeSortWrite(){
         if (index != dataDic.keys().size()-1)
             inputString = (QString)inputString + ",";
     }
-    inputString = QString(inputString + ";;\n");
+    inputString = QString(inputString + ";0,0,0;;;;\n");
     //qDebug() << dataDic.keys()[k];
     out << inputString;
 
 
     int n = dataDic.size();
-    mergeSort(out, 0, n-1, dataDic);
-
-
-    for (int i = 1; i < n; i++) {
-        for (int k = i; k >=1; k--) {
-            SData data1 = dataDic.values()[k-1];
-            SData data2 = dataDic.values()[k];
-            if (data2.size < data1.size) {
-                dataDic[k-1] = data2;
-                dataDic[k] = data1;
-            }
-            // write a line to out
-            QString inputString = "";
-            for(int index = 0; index < dataDic.keys().size(); index++) {
-                inputString =  QString(inputString+"%1").arg(dataDic[index].id);
-                if (index != dataDic.keys().size()-1)
-                    inputString = (QString)inputString + ",";
-            }
-            inputString = QString(inputString + ";%1,%2;\n").arg(dataDic[i].id).arg(dataDic[k].id);
-            //qDebug() << dataDic.keys()[k];
-            out << inputString;
-        }
-    }
+    mergeSort(out, 0, n-1, dataDic, n);
 
     // optional, as QFile destructor will already do it:
     file.close();
 }
-void TraceWriter::mergeSort(QTextStream &out, int start, int end, QMap<int, SData> &data) {
+void TraceWriter::mergeSort(QTextStream &out, int start, int end, QMap<int, SData> &data, int origSize) {
     if (start >= end) return;
     int mid = start + (end - start)/2;
-    mergeSort(out, start, mid, data);
-    mergeSort(out, mid+1, end, data);
-    merge(out, start, mid, end, data);
+    mergeSort(out, start, mid, data, origSize);
+    mergeSort(out, mid+1, end, data, origSize);
+    merge(out, start, mid, end, data, origSize);
 }
 
-void TraceWriter::merge(QTextStream &out, int start, int mid, int end, QMap<int, SData> &data) {
+void TraceWriter::merge(QTextStream &out, int start, int mid, int end, QMap<int, SData> &data,int origSize) {
     int left = start;
     int right = mid+1;
     int current = start;
 
-    while(left <= mid && right <= end) {
-        SData data1 = data.values()[left];
-        SData data2 = data.values()[right];
-        if (data2.size < data1.size) {
-            data[current] = data2;
-        } else {
-            data[current] = data1;
-        }
+    int dataSize = origSize;
+    //copy data into aux arrays
+    QMap<int, SData> leftArray;
+    for (int i = left; i <= mid; i++) {
+        leftArray.insert(i, data[i]);
+        data.remove(i);
     }
+    QMap<int, SData> rightArray;
+    for (int i = right; i <= end; i++) {
+        rightArray.insert(i, data[i]);
+        data.remove(i);
+    }
+    int leftSize = leftArray.size();
+    int rightSize = rightArray.size();
+
+    // write initial state to out
+    writeDicLine(out, 0, dataSize-1, data);
+
+    QString inputString = QString("%1,%2,%3;").arg(start).arg(mid).arg(end);   // start, mid, end
+    out << inputString;
+
+    writeDicLine(out, left, mid, leftArray);
+    writeDicLine(out, right, end, rightArray);
+
+    out << QString("%1,%2;").arg(left).arg(right);  // pointed, pointed;
+    out << "\n";
+
+    while(left <= mid && right <= end) {
+        SData data1 = leftArray[left];
+        SData data2 = rightArray[right];
+        if (data2.size < data1.size) {
+           // if (!data.contains(current))
+                data.insert(current, data2);
+           // else
+           //     data[current] = data2;
+            rightArray.remove(right);
+            right++;
+        } else {
+           // if (!data.contains(current))
+                data.insert(current, data1);
+           // else
+           //     data[current] = data1;
+            leftArray.remove(left);
+            left++;
+        }        
+        current++;
+
+        /******
+         * write data; might put these code in a function
+         * *****/
+        writeDicLine(out, 0, dataSize-1, data);
+
+        QString inputString = QString("%1,%2,%3;").arg(start).arg(mid).arg(end);   // start, mid, end
+        out << inputString;
+
+        writeDicLine(out, left, mid, leftArray);
+        writeDicLine(out, right, end, rightArray);
+
+        //out << QString("%1,%2;").arg(left).arg(right);  // pointed, pointed;
+        out << QString(";");  // pointed, pointed;
+        out << "\n";
+    }
+
+    while (left <= mid) {
+      //  if (!data.contains(current))
+            data.insert(current, leftArray[left]);
+      //  else
+      //      data[current] = leftArray[left];
+        leftArray.remove(left);
+        left++;
+        current++;
+        /******
+         * write data; might put these code in a function
+         * *****/
+        writeDicLine(out, 0, dataSize-1, data);
+
+        QString inputString = QString("%1,%2,%3;").arg(start).arg(mid).arg(end);   // start, mid, end
+        out << inputString;
+
+        writeDicLine(out, left, mid, leftArray);
+        writeDicLine(out, right, end, rightArray);
+
+        //out << QString("%1,%2;").arg(left).arg(right);  // pointed, pointed;
+        out << QString(";");  // pointed, pointed;
+        out << "\n";
+    }
+    while (right <= end) {
+     //   if (!data.contains(current))
+            data.insert(current, rightArray[right]);
+     //   else
+     //       data[current] = rightArray[right];
+        rightArray.remove(right);
+        right++;
+        current++;
+        /******
+         * write data; might put these code in a function
+         * *****/
+        writeDicLine(out, 0, dataSize-1, data);
+
+        QString inputString = QString("%1,%2,%3;").arg(start).arg(mid).arg(end);   // start, mid, end
+        out << inputString;
+
+        writeDicLine(out, left, mid, leftArray);
+        writeDicLine(out, right, end, rightArray);
+
+        //out << QString("%1,%2;").arg(left).arg(right);  // pointed, pointed;
+        out << QString(";");  // pointed, pointed;
+        out << "\n";
+    }
+}
+
+// write dic as a line in for , , , ; with data, or nothing if data missing
+void TraceWriter::writeDicLine(QTextStream &out, int startIndex, int endIndex,  QMap<int, SData>& data) {
+    QString inputString = "";
+    for(int index = startIndex; index <= endIndex; index++) {
+        if (data.contains(index)) {
+            qDebug() << data[index].id;
+            inputString =  QString(inputString+"%1").arg(data[index].id);
+        }
+        if (index != endIndex)
+            inputString = (QString)inputString + ",";
+    }
+    out << inputString + ";";
 }
 
 bool TraceWriter::fileEixsts(){
