@@ -30,8 +30,9 @@ private:
     QString dataName;
 
     //mergesort helper
-    void mergeSort(QTextStream &out, int, int, QMap<int, SData>&);
-    void merge(QTextStream &out, int start, int mid, int end, QMap<int, SData> &data);
+    void mergeSort(QTextStream &out, int, int, QMap<int, SData>&, int origSize);
+    void merge(QTextStream &out, int start, int mid, int end, QMap<int, SData> &data, int origSize);
+    void writeDicLine(QTextStream &out, int startIndex, int endIndex,  QMap<int, SData>& data);
 
 };
 
