@@ -13,6 +13,7 @@
 #include "genealgorithm.h"
 #include "algorithm.h"
 #include "dataset.h"
+#include <QTimer>
 
 namespace Ui {
 class MainWindow;
@@ -41,6 +42,8 @@ private slots:
     void on_alg_radio_checked();
     void go_back();
     void go_forward();
+    void to_start();
+    void to_end();
 
 private:
     Ui::MainWindow *ui;
@@ -62,9 +65,13 @@ private:
     QToolBar *animationToolBar;
     QAction *nextFrame;
     QAction *previousFrame;
+    QAction *toEnd;
+    QAction *toBegin;
 
     //to display psuedocode
     QTextBrowser *psuedoTextBox;
+
+    QTimer *timer;
 };
 
 #endif // MAINWINDOW_H

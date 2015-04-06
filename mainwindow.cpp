@@ -3,6 +3,9 @@
 #include <QRadioButton>
 #include <QDebug>
 #include <QTextBrowser>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle(tr("Algorithm Animation"));
     resize(600, 400);
 
+    timer = new QTimer(this);
+
 }
 
 MainWindow::~MainWindow()
@@ -49,13 +54,45 @@ void MainWindow::createActions() {
     previousFrame->setStatusTip(tr("Previous Step"));
     connect(previousFrame, SIGNAL(triggered()), this, SLOT(go_back()) );
 
+    toEnd = new QAction(tr("End"),this);
+    toEnd->setStatusTip(tr("Continue to the end"));
+    connect(toEnd, SIGNAL(triggered()), this, SLOT(to_end()) );
+
+    toBegin = new QAction(tr("Begin"),this);
+    toBegin->setStatusTip(tr("Continue to the start"));
+    connect(toBegin, SIGNAL(triggered()), this, SLOT(to_start()) );
+
 }
+
+void MainWindow::to_end(){
+    timer->stop();
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(go_back()));
+
+    connect(timer, SIGNAL(timeout()), this, SLOT(go_forward()));
+    timer->start(500);
+    //timer->singleShot(200, this, SLOT(go_forward()));
+}
+
+void MainWindow::to_start(){
+    timer->stop();
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(go_forward()));
+
+    connect(timer, SIGNAL(timeout()), this, SLOT(go_back()));
+    //timer->singleShot(200, this, SLOT(go_back()));
+    timer->start(500);
+}
+
 
 void MainWindow::go_forward(){
     algStateTextBox->clear();
     QString stateString = currentDataSet->go_forward();
     algStateTextBox->setPlainText(stateString);
     graphicsScene->advance();
+
+    // stop animation on finish
+    if (stateString.contains("End")) {
+        timer->stop();
+    }
 }
 
 void MainWindow::go_back(){
@@ -63,6 +100,11 @@ void MainWindow::go_back(){
     QString stateString = currentDataSet->go_back();
     algStateTextBox->setPlainText(stateString);
     graphicsScene->advance();
+
+    // stop animation on finish
+    if (stateString.contains("Start")) {
+        timer->stop();
+    }
 }
 
 void MainWindow::createToolBars() {
@@ -70,6 +112,10 @@ void MainWindow::createToolBars() {
     animationToolBar->addAction(nextFrame);
     animationToolBar = addToolBar(tr("Back"));
     animationToolBar->addAction(previousFrame);
+    animationToolBar = addToolBar(tr("End"));
+    animationToolBar->addAction(toEnd);
+    animationToolBar = addToolBar(tr("Start"));
+    animationToolBar->addAction(toBegin);
 }
 
 QGroupBox *MainWindow::createAlgorithmGroup() {
@@ -195,7 +241,7 @@ void MainWindow::initGraphicsItem() {
          if (i != currentAlgMap.end() && i.key() == button) {
 
              QString alg = currentAlgMap[button];
-             QString codeFilePath = "/Users/marykatewilliams/FinalProject/dsa_simulation/pseudocode/" + currentGenAlg.getName() + "/" + alg + ".txt";
+             QString codeFilePath = "/Users/cindywang/simulator/pseudocode/" + currentGenAlg.getName() + "/" + alg + ".txt";
              QFile psuedoFile(codeFilePath);
              qDebug() << codeFilePath;
              psuedoFile.open(QIODevice::ReadOnly);

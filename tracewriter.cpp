@@ -7,7 +7,7 @@
 TraceWriter::TraceWriter(QString dataName, QString genAlgName, QString algName):
     dataName(dataName), algName(algName), genAlgName(genAlgName)
 {
-    this->fileName = "/Users/marykatewilliams/FinalProject/dsa_simulation/" + dataName + "_" + genAlgName + "_" +
+    this->fileName = "/Users/cindywang/simulator/" + dataName + "_" + genAlgName + "_" +
             algName + ".txt";
 }
 
@@ -17,7 +17,7 @@ TraceWriter::~TraceWriter()
 }
 void TraceWriter::setAlgName(QString algName){
     this->algName = algName;
-    this->fileName = "/Users/marykatewilliams/FinalProject/dsa_simulation/" + dataName + "_" + genAlgName + "_" +
+    this->fileName = "/Users/cindywang/simulator/" + dataName + "_" + genAlgName + "_" +
             algName + ".txt";
 }
 
