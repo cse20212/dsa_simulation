@@ -37,7 +37,7 @@ QList<QString> GeneAlgorithm::getAlgList(){
 // search through the directory for list
 void GeneAlgorithm::setDataList(){
     /*
-    QString dirName = "/Users/cindywang/simulator/";
+    QString dirName = "/Users/marykatewilliams/FinalProject/dsa_simulation/";
     QString filePath = dirName + "data/" + name ;
     */
     QString filePath = (QString)":/" + "data/" + name;

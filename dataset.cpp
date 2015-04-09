@@ -37,7 +37,7 @@ void DataSet::checkTraceFile(){
 }
 
 void DataSet::setDataPath(){
-    //QString dir = "/Users/cindywang/simulator";
+    //QString dir = "/Users/marykatewilliams/FinalProject/dsa_simulation";
     dataPath = (QString)":/data/" + genAlgName + "/" + name + ".txt";
 }
 
@@ -141,9 +141,9 @@ void DataSet::initState(QString algName) {
     checkTraceFile();   // check if new alg data combination has corresponding trace file
     currentTraceIndex = 0;
     QString stateString;
-    if (algName == "InsertionSort") {
+    if (algName == "InsertionSort" ||  algName == "SelectionSort") {
         stateString = reader->simpleSortReader(currentTraceIndex, itemDic);
-    } else {
+    } else if(algName == "MergeSort") {
         stateString = reader->recursiveSortReader(currentTraceIndex, itemDic);
     }
 
