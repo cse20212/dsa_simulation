@@ -38,7 +38,6 @@ QList<QString> GeneAlgorithm::getAlgList(){
 }
 // search through the directory for list
 void GeneAlgorithm::setDataList(){
-
     QString filePath = (QString)localDataPath + "data/" + name;
     QDir dir(filePath);
     QStringList fileNames = dir.entryList(QDir::NoDotAndDotDot|QDir::Files);    // return file.txt name

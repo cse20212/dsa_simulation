@@ -39,6 +39,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     timer = new QTimer(this);
 
+    QFile psuedoFile("/Users/marykatewilliams/FinalProject/dsa_simulation/pseudocode/sorting/InsertionSort.txt");
+    psuedoFile.open(QIODevice::ReadOnly);
+    QTextStream stream(&psuedoFile);
+    QString content = stream.readAll();
+    psuedoFile.close();
+    psuedoTextBox->setPlainText(content);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -242,7 +250,7 @@ void MainWindow::initGraphicsItem() {
          if (i != currentAlgMap.end() && i.key() == button) {
 
              QString alg = currentAlgMap[button];
-             QString codeFilePath = "/Users/cindywang/simulator/pseudocode/" + currentGenAlg.getName() + "/" + alg + ".txt";
+             QString codeFilePath = "/Users/marykatewilliams/FinalProject/dsa_simulation/pseudocode/" + currentGenAlg.getName() + "/" + alg + ".txt";
              QFile psuedoFile(codeFilePath);
              qDebug() << codeFilePath;
              psuedoFile.open(QIODevice::ReadOnly);
