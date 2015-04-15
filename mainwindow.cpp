@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     createToolBars();
 
     setWindowTitle(tr("Algorithm Animation"));
-    resize(600, 400);
+    resize(800, 400);
 
     timer = new QTimer(this);
 
@@ -218,10 +218,11 @@ void MainWindow::initGraphicsItem() {
         if (i != currentDataMap.end() && i.key() == button) {
             DataSet* set = currentDataMap[button];
             // reset data to original
-
+            //set->generateRand();
             currentDataSet = set;
+            currentDataSet->setAlgName(currentAlgorithm);
+            currentDataSet->generateRand();
             currentDataSet->initState(currentAlgorithm);
-
             initGraphicsItem();
         } else {
             qDebug() << "Error in on_data_radio_checked";

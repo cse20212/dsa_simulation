@@ -7,10 +7,12 @@
 
 GeneAlgorithm::GeneAlgorithm(QString name):name(name)
 {
+    localDataPath = "/Users/cindywang/simulator/";
     setDataList();
     setAlgList();
 }
 GeneAlgorithm::GeneAlgorithm(){
+    localDataPath = "/Users/cindywang/simulator/";
     name = "sorting";
     setDataList();
     setAlgList();
@@ -36,16 +38,13 @@ QList<QString> GeneAlgorithm::getAlgList(){
 }
 // search through the directory for list
 void GeneAlgorithm::setDataList(){
-    /*
-    QString dirName = "/Users/cindywang/simulator/";
-    QString filePath = dirName + "data/" + name ;
-    */
-    QString filePath = (QString)":/" + "data/" + name;
+
+    QString filePath = (QString)localDataPath + "data/" + name;
     QDir dir(filePath);
     QStringList fileNames = dir.entryList(QDir::NoDotAndDotDot|QDir::Files);    // return file.txt name
     foreach (QString str, fileNames) {
         str = (str.split(".") ).at(0);  // remove .txt
-        DataSet *mySet = new DataSet(name, str);
+        DataSet *mySet = new DataSet(name, str, "InsertionSort");
         dataList.append(mySet);
     }
 }

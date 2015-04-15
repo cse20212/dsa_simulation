@@ -4,10 +4,16 @@
 #include <QStringList>
 #include <QDebug>
 #include <QDir>
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 
 DataSet::DataSet(QString genAlgName, QString name, QString algName):YPOS(100)
 {
+    localDataPath = "/Users/cindywang/simulator/";
+    //seed rand
+    srand(time(NULL));
     reader = new TraceReader(name, genAlgName, algName);
     this->name = name;
     this->genAlgName = genAlgName;
@@ -17,9 +23,10 @@ DataSet::DataSet(QString genAlgName, QString name, QString algName):YPOS(100)
 
     writer = new TraceWriter(name, genAlgName, algName);
     currentTraceIndex = 0;
-
     // check if trace file exists
     checkTraceFile();
+
+
 }
 
 DataSet::~DataSet()
@@ -37,12 +44,11 @@ void DataSet::checkTraceFile(){
 }
 
 void DataSet::setDataPath(){
-    //QString dir = "/Users/cindywang/simulator";
-    dataPath = (QString)":/data/" + genAlgName + "/" + name + ".txt";
+    dataPath = (QString)localDataPath + "data/" + genAlgName + "/" + name + ".txt";
 }
 
 void DataSet::setAlgName(QString name) {
-    algName = name;
+    this -> algName = name;
     reader->setAlgName(name);
     writer->setAlgName(name);
 }
@@ -69,7 +75,7 @@ QList<DataItem *> DataSet::getItems(){
 // read file and set items
 void DataSet::setItems(){
     QFile dataFile(dataPath);
-    if(!dataFile.open(QFile::ReadOnly |
+    if(!dataFile.open(QFile::ReadWrite |
                       QFile::Text))
         {
             qDebug() << " Could not open the file for reading";
@@ -77,6 +83,7 @@ void DataSet::setItems(){
         }
     QString data = dataFile.readAll();
     QStringList dataList = data.split(',');
+    itemDic.clear();
     // initialize DataItems based on the list of string numbers
     qDebug() << dataList.size();
     for (int i = 0; i < dataList.size(); i++) {
@@ -200,4 +207,48 @@ void DataSet::initState(QString algName) {
 
      stateString = QString(stateString + "%1").arg("\n");
      return stateString;
+ }
+
+ void DataSet::generateRand() {
+     if (name =="Random") {
+         QFile dataFile(dataPath);
+         if(!dataFile.open(QFile::ReadWrite|QFile::Truncate|QFile::Text))
+             {
+                 qDebug() << " Could not open Random data for writing";
+                 return;
+             }
+         QTextStream in(&dataFile);
+
+         int numElem = 8;
+         QString dataString = "";
+         int randNum = rand() % 50 + 10;
+         dataString = QString(dataString + "%1").arg(randNum);
+         for (int i = 1; i < numElem; i++) {
+             int randNum = rand() % 50 + 10;
+             dataString = QString(dataString + ",%1").arg(randNum);
+         }
+         dataString = dataString + "\n";
+         in << dataString;
+         dataFile.close();
+         setItems();
+
+         // clear up the trace
+         // TODO:: need to clear up everything related to this data
+        // QString traceFileName = (QString)localDataPath + "trace/" + name + "_" + genAlgName + "_" + algName + ".txt";
+        // QFile traceFile(traceFileName);
+
+         QString tracePath = (QString)localDataPath + "trace";
+         QDir dir(tracePath);
+         QStringList filters;
+         filters << name + "*";
+         dir.setNameFilters(filters);
+         QStringList fileNames = dir.entryList(QDir::NoDotAndDotDot|QDir::Files);    // return file.txt name
+         foreach (QString str, fileNames) {
+             QString traceFileName = (QString)localDataPath + "trace/" + str;
+             QFile traceFile(traceFileName);
+             traceFile.remove();
+         }
+
+         //traceFile.remove();
+     }
  }

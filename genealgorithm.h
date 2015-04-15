@@ -25,6 +25,8 @@ private:
     QString name;
     QList<QString> algList;
     QList<DataSet*> dataList;
+
+    QString localDataPath;
 };
 
 #endif // GENEALGORITHM_H

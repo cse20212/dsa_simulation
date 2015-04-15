@@ -6,7 +6,8 @@
 TraceReader::TraceReader(QString dataName, QString genAlgName, QString algName): dataName(dataName),
     genAlgName(genAlgName), algName(algName)
 {
-    fileName = "/Users/cindywang/simulator/" + dataName + "_" + genAlgName + "_" +
+    localDataPath = "/Users/cindywang/simulator/";
+    fileName = (QString)localDataPath + "trace/" + dataName + "_" + genAlgName + "_" +
             algName + ".txt";
 
 }
@@ -170,6 +171,6 @@ QString TraceReader::recursiveSortReader(int index, QMap<int, DataItem *> &itemD
 
 void TraceReader::setAlgName(QString algName){
     this->algName = algName;
-    fileName = "/Users/cindywang/simulator/" + dataName + "_" + genAlgName + "_" +
+    fileName = (QString)localDataPath + "trace/" + dataName + "_" + genAlgName + "_" +
             algName + ".txt";
 }

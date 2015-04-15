@@ -27,6 +27,8 @@ public:
     void setItems();
     double getSize();
 
+    void generateRand();    // generate a new set of random data if Random is selected
+
 
     QString go_back();   // read trace file line index to update dataItems
     QString go_forward();
@@ -49,6 +51,8 @@ private:
     TraceReader* reader;
     TraceWriter* writer;
     int currentTraceIndex;
+
+    QString localDataPath;
 
 };
 

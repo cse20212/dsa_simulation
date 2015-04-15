@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>data/sorting/Random.txt</file>
         <file>pseudocode/sorting/InsertionSort.txt</file>
         <file>pseudocode/sorting/SelectionSort.txt</file>
-        <file>data/sorting/Inverse.txt</file>
     </qresource>
 </RCC>

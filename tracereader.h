@@ -21,6 +21,8 @@ private:
     QString algName;
     QString fileName;
 
+    QString localDataPath;
+
 };
 
 #endif // TRACEREADER_H

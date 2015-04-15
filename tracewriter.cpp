@@ -7,7 +7,8 @@
 TraceWriter::TraceWriter(QString dataName, QString genAlgName, QString algName):
     dataName(dataName), algName(algName), genAlgName(genAlgName)
 {
-    this->fileName = "/Users/cindywang/simulator/" + dataName + "_" + genAlgName + "_" +
+    localDataPath = "/Users/cindywang/simulator/";
+    this->fileName = (QString)localDataPath + "trace/" + dataName + "_" + genAlgName + "_" +
             algName + ".txt";
 }
 
@@ -17,7 +18,7 @@ TraceWriter::~TraceWriter()
 }
 void TraceWriter::setAlgName(QString algName){
     this->algName = algName;
-    this->fileName = "/Users/cindywang/simulator/" + dataName + "_" + genAlgName + "_" +
+    this->fileName = (QString)localDataPath + "trace/" + dataName + "_" + genAlgName + "_" +
             algName + ".txt";
 }
 
@@ -44,7 +45,7 @@ void TraceWriter::writeTrace(){
 void TraceWriter::insertionSortWrite(){
     QMap<int, SData> dataDic; // dictionary of data<position, data>
     //first get data from resource file and put them in a map
-    QString dataPath = (QString)":/data/" + genAlgName + "/" + dataName + ".txt";
+    QString dataPath = (QString)localDataPath + "data/" + genAlgName + "/" + dataName + ".txt";
     QFile dataFile(dataPath);
     if(!dataFile.open(QFile::ReadOnly |
                       QFile::Text))
@@ -113,7 +114,7 @@ void TraceWriter::insertionSortWrite(){
 void TraceWriter::mergeSortWrite(){
     QMap<int, SData> dataDic; // dictionary of data<position, data>
     //first get data from resource file and put them in a map
-    QString dataPath = (QString)":/data/" + genAlgName + "/" + dataName + ".txt";
+    QString dataPath = (QString)localDataPath + "data/" + genAlgName + "/" + dataName + ".txt";
     QFile dataFile(dataPath);
     if(!dataFile.open(QFile::ReadOnly |
                       QFile::Text))
@@ -310,7 +311,7 @@ bool TraceWriter::fileEixsts(){
 void TraceWriter::selectionSortWrite(){
     QMap<int, SData> dataDic; // dictionary of data<position, data>
     //first get data from resource file and put them in a map
-    QString dataPath = (QString)":/data/" + genAlgName + "/" + dataName + ".txt";
+    QString dataPath = (QString)localDataPath + "data/" + genAlgName + "/" + dataName + ".txt";
     QFile dataFile(dataPath);
     if(!dataFile.open(QFile::ReadOnly |
                       QFile::Text))

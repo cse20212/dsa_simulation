@@ -30,6 +30,9 @@ private:
     QString genAlgName;
     QString dataName;
 
+    QString localDataPath;
+
+
     //mergesort helper
     void mergeSort(QTextStream &out, int, int, QMap<int, SData>&, int origSize);
     void merge(QTextStream &out, int start, int mid, int end, QMap<int, SData> &data, int origSize);
