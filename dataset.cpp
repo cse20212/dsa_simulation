@@ -44,12 +44,7 @@ void DataSet::checkTraceFile(){
 }
 
 void DataSet::setDataPath(){
-<<<<<<< HEAD
     dataPath = (QString)localDataPath + "data/" + genAlgName + "/" + name + ".txt";
-=======
-    //QString dir = "/Users/marykatewilliams/FinalProject/dsa_simulation";
-    dataPath = (QString)":/data/" + genAlgName + "/" + name + ".txt";
->>>>>>> 3f91ea98a14925e0ff5a71ca289b5998a0ae150e
 }
 
 void DataSet::setAlgName(QString name) {
@@ -109,7 +104,7 @@ QString DataSet::go_back() {
     if (currentTraceIndex > 0) {
         currentTraceIndex--;
         QString stateString;
-        if (algName == "InsertionSort") {
+        if (algName == "InsertionSort" || algName == "SelectionSort") {
             stateString = reader->simpleSortReader(currentTraceIndex, itemDic);
         } else {
             stateString = reader->recursiveSortReader(currentTraceIndex, itemDic);
@@ -132,7 +127,7 @@ QString DataSet::go_back() {
 QString DataSet::go_forward() {
         currentTraceIndex++;
         QString stateString;
-        if (algName == "InsertionSort") {
+        if (algName == "InsertionSort"|| algName == "SelectionSort") {
             stateString = reader->simpleSortReader(currentTraceIndex, itemDic);
         } else {
             stateString = reader->recursiveSortReader(currentTraceIndex, itemDic);
