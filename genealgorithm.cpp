@@ -7,12 +7,12 @@
 
 GeneAlgorithm::GeneAlgorithm(QString name):name(name)
 {
-    localDataPath = "/Users/cindywang/simulator/";
+    localDataPath = "/Users/marykatewilliams/FinalProject/dsa_simulation/";
     setDataList();
     setAlgList();
 }
 GeneAlgorithm::GeneAlgorithm(){
-    localDataPath = "/Users/cindywang/simulator/";
+    localDataPath = "/Users/marykatewilliams/FinalProject/dsa_simulation/";
     name = "sorting";
     setDataList();
     setAlgList();

@@ -11,7 +11,7 @@
 
 DataSet::DataSet(QString genAlgName, QString name, QString algName):YPOS(100)
 {
-    localDataPath = "/Users/cindywang/simulator/";
+    localDataPath = "/Users/marykatewilliams/FinalProject/dsa_simulation/";
     //seed rand
     srand(time(NULL));
     reader = new TraceReader(name, genAlgName, algName);

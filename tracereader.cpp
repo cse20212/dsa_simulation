@@ -6,7 +6,7 @@
 TraceReader::TraceReader(QString dataName, QString genAlgName, QString algName): dataName(dataName),
     genAlgName(genAlgName), algName(algName)
 {
-    localDataPath = "/Users/cindywang/simulator/";
+    localDataPath = "/Users/marykatewilliams/FinalProject/dsa_simulation/";
     fileName = (QString)localDataPath + "trace/" + dataName + "_" + genAlgName + "_" +algName + ".txt";
 
 }
