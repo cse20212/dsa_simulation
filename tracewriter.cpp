@@ -7,7 +7,7 @@
 TraceWriter::TraceWriter(QString dataName, QString genAlgName, QString algName):
     dataName(dataName), algName(algName), genAlgName(genAlgName)
 {
-    localDataPath = "/Users/cindywang/simulator/";
+    localDataPath = "/Users/cindywang/simulator";
     this->fileName = (QString)localDataPath + "trace/" + dataName + "_" + genAlgName + "_" + algName + ".txt";
 }
 

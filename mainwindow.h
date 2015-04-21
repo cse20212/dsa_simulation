@@ -9,6 +9,8 @@
 #include <QRadioButton>
 #include <QList>
 #include <QMap>
+#include <QPushButton>
+#include <QtWidgets>
 #include <QTextBrowser>
 #include "genealgorithm.h"
 #include "algorithm.h"

@@ -55,21 +55,26 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::createActions() {
-    nextFrame = new QAction(QIcon("next.png"), tr("Next"),this);
-    nextFrame->setStatusTip(tr("Next Step"));
-    connect(nextFrame, SIGNAL(triggered()), this, SLOT(go_forward()) );
+
+    toBegin = new QAction(tr("Begin"),this);
+    toBegin->setIcon(QIcon(localDataPath + "beginButton.png"));
+    toBegin->setStatusTip(tr("Continue to the start"));
+    connect(toBegin, SIGNAL(triggered()), this, SLOT(to_start()) );
 
     previousFrame = new QAction(tr("Back"),this);
+    previousFrame->setIcon(QIcon(localDataPath + "backButton.png"));
     previousFrame->setStatusTip(tr("Previous Step"));
     connect(previousFrame, SIGNAL(triggered()), this, SLOT(go_back()) );
 
+    nextFrame = new QAction(tr("Next"),this);
+    nextFrame->setIcon(QIcon(localDataPath + "nextButton.png"));
+    nextFrame->setStatusTip(tr("Next Step"));
+    connect(nextFrame, SIGNAL(triggered()), this, SLOT(go_forward()) );
+
     toEnd = new QAction(tr("End"),this);
+    toEnd->setIcon(QIcon(localDataPath + "endButton.png"));
     toEnd->setStatusTip(tr("Continue to the end"));
     connect(toEnd, SIGNAL(triggered()), this, SLOT(to_end()) );
-
-    toBegin = new QAction(tr("Begin"),this);
-    toBegin->setStatusTip(tr("Continue to the start"));
-    connect(toBegin, SIGNAL(triggered()), this, SLOT(to_start()) );
 
 }
 
@@ -117,15 +122,18 @@ void MainWindow::go_back(){
 }
 
 void MainWindow::createToolBars() {
-    animationToolBar = addToolBar(tr("Next"));
-    animationToolBar->addAction(nextFrame);
-   // animationToolBar = addToolBar(tr("Back"));
-    animationToolBar->addAction(previousFrame);
-   // animationToolBar = addToolBar(tr("End"));
-    animationToolBar->addAction(toEnd);
-   // animationToolBar = addToolBar(tr("Start"));
+
+    animationToolBar = addToolBar(tr("Start"));
     animationToolBar->addAction(toBegin);
+    //animationToolBar = addToolBar(tr("Back"));
+    animationToolBar->addAction(previousFrame);
+    //animationToolBar = addToolBar(tr("Next"));
+    animationToolBar->addAction(nextFrame);
+    //animationToolBar = addToolBar(tr("End"));
+    animationToolBar->addAction(toEnd);
+
 }
+
 
 QGroupBox *MainWindow::createAlgorithmGroup() {
     QGroupBox *groupBox = new QGroupBox(tr("Algorithms"));
