@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     grid->addWidget(createDataGroup(), 2, 0, 2, 1);
     grid->addWidget(createGraphicsWindow(), 0, 1, 3, 5);
     grid->addWidget(createStateTextBox(), 3, 1, 1, 5);
-    grid->addWidget(createPsuedoTextBox(), 0, 6, 4, 3);
+    grid->addWidget(createPsuedoTextBox(), 0, 6, 4, 1);
 
     createActions();
     createToolBars();
@@ -39,7 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     timer = new QTimer(this);
 
-    QFile psuedoFile("/Users/marykatewilliams/FinalProject/dsa_simulation/pseudocode/sorting/InsertionSort.txt");
+    localDataPath = "/Users/cindywang/simulator/";
+    QFile psuedoFile(localDataPath + "pseudocode/sorting/InsertionSort.txt");
     psuedoFile.open(QIODevice::ReadOnly);
     QTextStream stream(&psuedoFile);
     QString content = stream.readAll();
@@ -54,7 +55,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::createActions() {
-    nextFrame = new QAction(tr("Next"),this);
+    nextFrame = new QAction(QIcon("next.png"), tr("Next"),this);
     nextFrame->setStatusTip(tr("Next Step"));
     connect(nextFrame, SIGNAL(triggered()), this, SLOT(go_forward()) );
 
@@ -118,11 +119,11 @@ void MainWindow::go_back(){
 void MainWindow::createToolBars() {
     animationToolBar = addToolBar(tr("Next"));
     animationToolBar->addAction(nextFrame);
-    animationToolBar = addToolBar(tr("Back"));
+   // animationToolBar = addToolBar(tr("Back"));
     animationToolBar->addAction(previousFrame);
-    animationToolBar = addToolBar(tr("End"));
+   // animationToolBar = addToolBar(tr("End"));
     animationToolBar->addAction(toEnd);
-    animationToolBar = addToolBar(tr("Start"));
+   // animationToolBar = addToolBar(tr("Start"));
     animationToolBar->addAction(toBegin);
 }
 
@@ -250,7 +251,7 @@ void MainWindow::initGraphicsItem() {
          if (i != currentAlgMap.end() && i.key() == button) {
 
              QString alg = currentAlgMap[button];
-             QString codeFilePath = "/Users/marykatewilliams/FinalProject/dsa_simulation/pseudocode/" + currentGenAlg.getName() + "/" + alg + ".txt";
+             QString codeFilePath = localDataPath + "/pseudocode/" + currentGenAlg.getName() + "/" + alg + ".txt";
              QFile psuedoFile(codeFilePath);
              qDebug() << codeFilePath;
              psuedoFile.open(QIODevice::ReadOnly);

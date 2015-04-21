@@ -71,6 +71,8 @@ private:
     //to display psuedocode
     QTextBrowser *psuedoTextBox;
 
+    QString localDataPath;
+
     QTimer *timer;
 };
 
