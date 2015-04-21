@@ -121,13 +121,14 @@ void MainWindow::go_back(){
 }
 
 void MainWindow::createToolBars() {
+
     animationToolBar = addToolBar(tr("Start"));
     animationToolBar->addAction(toBegin);
-    animationToolBar = addToolBar(tr("Back"));
+    //animationToolBar = addToolBar(tr("Back"));
     animationToolBar->addAction(previousFrame);
-    animationToolBar = addToolBar(tr("Next"));
+    //animationToolBar = addToolBar(tr("Next"));
     animationToolBar->addAction(nextFrame);
-    animationToolBar = addToolBar(tr("End"));
+    //animationToolBar = addToolBar(tr("End"));
     animationToolBar->addAction(toEnd);
 
 }
