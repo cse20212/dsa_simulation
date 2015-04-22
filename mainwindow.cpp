@@ -57,22 +57,22 @@ MainWindow::~MainWindow()
 void MainWindow::createActions() {
 
     toBegin = new QAction(tr("Begin"),this);
-    toBegin->setIcon(QIcon(localDataPath + "beginButton.png"));
+    toBegin->setIcon(QIcon("/Users/cindywang/simulator/beginButton.png"));
     toBegin->setStatusTip(tr("Continue to the start"));
     connect(toBegin, SIGNAL(triggered()), this, SLOT(to_start()) );
 
     previousFrame = new QAction(tr("Back"),this);
-    previousFrame->setIcon(QIcon(localDataPath + "backButton.png"));
+    previousFrame->setIcon(QIcon("/Users/cindywang/simulator/backButton.png"));
     previousFrame->setStatusTip(tr("Previous Step"));
     connect(previousFrame, SIGNAL(triggered()), this, SLOT(go_back()) );
 
     nextFrame = new QAction(tr("Next"),this);
-    nextFrame->setIcon(QIcon(localDataPath + "nextButton.png"));
+    nextFrame->setIcon(QIcon("/Users/cindywang/simulator/nextButton.png"));
     nextFrame->setStatusTip(tr("Next Step"));
     connect(nextFrame, SIGNAL(triggered()), this, SLOT(go_forward()) );
 
     toEnd = new QAction(tr("End"),this);
-    toEnd->setIcon(QIcon(localDataPath + "endButton.png"));
+    toEnd->setIcon(QIcon("/Users/cindywang/simulator/endButton.png"));
     toEnd->setStatusTip(tr("Continue to the end"));
     connect(toEnd, SIGNAL(triggered()), this, SLOT(to_end()) );
 
@@ -81,7 +81,7 @@ void MainWindow::createActions() {
 void MainWindow::to_end(){
     timer->stop();
     disconnect(timer, SIGNAL(timeout()), this, SLOT(go_back()));
-
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(go_forward()));
     connect(timer, SIGNAL(timeout()), this, SLOT(go_forward()));
     timer->start(500);
     //timer->singleShot(200, this, SLOT(go_forward()));
@@ -90,7 +90,7 @@ void MainWindow::to_end(){
 void MainWindow::to_start(){
     timer->stop();
     disconnect(timer, SIGNAL(timeout()), this, SLOT(go_forward()));
-
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(go_back()));
     connect(timer, SIGNAL(timeout()), this, SLOT(go_back()));
     //timer->singleShot(200, this, SLOT(go_back()));
     timer->start(500);
@@ -227,8 +227,8 @@ void MainWindow::initGraphicsItem() {
 
 // slots to connect with data selection, set/update current data
  void MainWindow::on_data_radio_checked(){
-     // e.g. check with member variable _foobarButton
 
+     // e.g. check with member variable _foobarButton
         QRadioButton* button = dynamic_cast<QRadioButton*>(sender());
         QMap<QRadioButton*, DataSet*>::const_iterator i = currentDataMap.find(button);
         // just get the first match, as there can only be one
@@ -252,7 +252,6 @@ void MainWindow::initGraphicsItem() {
  // slots to connect with data selection, set/update current data
   void MainWindow::on_alg_radio_checked(){
       // e.g. check with member variable _foobarButton
-
          QRadioButton* button = dynamic_cast<QRadioButton*>(sender());
          QMap<QRadioButton*, QString>::const_iterator i = currentAlgMap.find(button);
          // just get the first match, as there can only be one
