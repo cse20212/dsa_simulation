@@ -1,0 +1,90 @@
+﻿Project Time Log
+
+
+MaryKathryn Williams
+
+
+
+
+
+Xinyi Wang
+4:00-6:00 (2/22/15):
+meeting
+
+
+7:00-11:00pm(2/24/15):
+Added slots and signals to insertionsort class
+Added “Next” button that advances the algorithm one step and update graphics window
+There is some bugs with dataset modification
+
+
+9:00-11:00pm(2/25/15):
+Trying to fix the Qlist modification bugs
+
+
+7:00-9:00pm(3/3/15)
+Read documentation on Github commands and branching
+Read documentation on Qt Graphics window, widget and view
+
+
+8:00-11:00pm(3/5/15)
+Adjusted the graphics items size, placed them inside graphics window
+Added pointer graphics to processed data, but the pointers are not displayed correctly
+
+
+11:am - 12:00 pm (3/6/15)
+Read documentation on Git merge, push, commit commands and Git workflow
+
+
+7:00pm - 10:00pm (3/6/15)
+Fixed the pointer problem and now the color change correctly indicates the data being processed
+
+
+
+
+2:00pm - 7:00pm (3/17/15)
+Modified the program structure so that two new classes, traceReader and traceWriter handles the algorithm data states
+
+
+2:00pm - 7:00pm (3/19/15)
+Worked on insertion sort with the traceReader and traceWriter. Program is now able to step forward and backward through a program
+
+
+7:00pm - 9:00pm (3/24/15)
+Started working on mergesort trace handling; thinking about how to represent data with recursive algorithm
+
+
+7:00pm - 10:00pm (3/26/15)
+Continue working on mergesort
+
+
+7:00pm - 9:00pm (4/5/15)
+Added the functionality to continuously step through the algorithm
+
+
+8:10am - 9:30am (4/6/15)
+Fixed bugs with the timer used to step through the algorithm and layout problem
+
+
+7:00pm - 9:00pm (4/9/15)
+Started working on generating random data sets
+
+
+8:00pm - 9:30pm (4/11/15)
+Managed to modify random data set programmatically at run time  
+
+
+8:10am - 9:30am (4/13/15)
+Modified mergesort for the new random data generation
+
+
+7:00pm - 9:00pm (4/15/15)
+Fixed the bugs with modified random data set, so that mergesort displayed correctly
+
+
+8:00am - 9:00am (4/17/15)
+Added random number generator into the data set
+
+
+7:00pm - 10:00pm (4/18/15)
+Fixed the bugs in selection sort
