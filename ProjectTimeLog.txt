@@ -2,6 +2,51 @@
 
 
 MaryKathryn Williams
+2/22/15 4:00-6:00pm
+Meeting
+
+2/25/15 7:00-9:00pm
+Watched Qt Tutorials (On Youtube by C++ Tutorial)
+
+2/26/15 8:00-9:00pm
+Looked at code Cindy wrote to understand what she created so far
+
+3/5/15 8:00-9:00 pm
+Watched Github tutorials and looked at Github documentation
+
+3/11/15 2:00-4:00pm
+Watched more Qt Tutorials (On YouTube by C++ Tutorial)
+
+3/12/15 8:00-10:00pm
+Worked on implementing selection sort algorithm; doesn't compile
+
+3/18/15 9:00-10:00pm
+Got selection sort algorithm to compile; created radio button for algorithm on gui; radio button not
+yet linked to algorithm
+
+3/20/15 3:00-3:30pm
+Able to get radio button linked with algorithm; algorithm sorts data but steps are not in right order
+
+3/23/15 7:00-8:00pm
+Fixed some errors in selection sort algorithm; still compiles and sorts but steps are still not in
+right order; simulation seems to be skipping step
+
+3/27/15 10:00am-12:00pm
+Read through Cindy's code (tracewriter and tracereader) to understand new process of simulation
+
+3/29/15 12:00-1:30pm
+Re-worked selection sort to fit new design process; compiles but doesn't work yet
+
+4/2/15 8:00-10:00pm
+Watched Qt Tutorials and read documentation on how to create a static text box for our psuedocode
+
+4/7/15 2:00-3:30pm
+Created a text box and wrote corresponding files to display particular psuedocode that corresponds to
+the current algorithm
+
+4/10/15 11:00am-1:30pm
+Continued to work on selection sort
+
 
 
 
