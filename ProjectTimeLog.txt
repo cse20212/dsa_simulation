@@ -47,9 +47,12 @@ the current algorithm
 4/10/15 11:00am-1:30pm
 Continued to work on selection sort
 
+4/15/15 2:00-4:00pm
+Read documentation and watched tutorials about differnt toolbar options and push buttons to figure
+out the best way to link images/icons to the current toolbar menu buttons
 
-
-
+4/16/15 7:00-8:30pm
+Figured out how to link images to toolbar buttons; successfully added a complete set of items
 
 
 Xinyi Wang
